@@ -4,21 +4,21 @@ title: About
 permalink: /about/
 ---
 
-Hi，我是 lemon.
+Hi，我是 Lau.
 
 ### 技能
 
-Linux后端分布式高性能服务开发，差一点精通 C++，Golang 成长中，Python小玩具。
+业务Slamer选手，差一点精通 C++，写过C嵌入式代码，玩过Stm32、DSP、Arm，本科电气工程及其自动化专业、研究生计算机-SLAM方向。
+
+了解NLP常见模型、CV目标检测、语义分割、图像分类。
+
+Leetcode刷题200+，最爱手撕动态规划题。
 
 ### 经历
 
-软件工程师(Software Engineer)，电子信息工程学士学位( Electronic and Information Engineering )，从事服务器软件后台开发工作多年，现就职腾讯（Tencent）公司。
+西南某大学期间参加大创项目、机械创新、电子设计、数学建模、数学竞赛。
 
-个人技术公众号「后端技术学堂」分享、记录、成长，欢迎扫码添加。
-
-![公众号二维码](https://upload-images.jianshu.io/upload_images/7842464-15f939ec039690f6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
-
-
+研究生期间：华为软件挑战赛64强。
 
 ### 版权声明
 
