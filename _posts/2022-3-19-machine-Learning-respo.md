@@ -1,9 +1,9 @@
 ---
 layout: post
-title: Ubuntu系统截图、录屏方法
-date: 2021-11-07
-author: zxl19
-tags: [Ubuntu, Note]
+title: 机器学习算法常用工具和库
+date: 2022-3-19
+author: Lau
+tags: [ML]
 comments: true
 toc: true
 pinned: false
