@@ -9,6 +9,10 @@ toc: true
 pinned: false
 ---
 
+机器学习常用算法库和工具
+
+<!-- more -->
+
 ## Machine Learning, Deep Learning, and Computer Vision References
 
 > Data is [the new oil](https://medium.com/project-2030/data-is-the-new-oil-a-ludicrous-proposition-1d91bba4f294)? No: Data is [the new soil](https://towardsdatascience.com/data-is-not-the-new-oil-bdb31f61bc2d). ~ David McCandless
