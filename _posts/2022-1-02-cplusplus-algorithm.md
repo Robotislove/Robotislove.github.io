@@ -39,7 +39,7 @@ leetcode平台是不需要我们自己写数据输入的，只需要在下图的
 
 然而在其他的OJ平台上刷题，是需要自己写输入环境的，比如下面的[洛谷](https://www.luogu.com.cn/problem/list)平台下。
 
-![image-20210905122606914](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20210905122606914.png)
+[![qnDXMq.png](https://s1.ax1x.com/2022/03/21/qnDXMq.png)](https://imgtu.com/i/qnDXMq)
 
 然后在网页编辑框填写自己的代码提交评测。
 
