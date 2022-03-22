@@ -118,4 +118,4 @@ exclude:
   - LICENSE
   - README.md
   - CNAME
-
+markdown: kramdown
