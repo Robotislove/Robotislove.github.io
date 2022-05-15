@@ -267,3 +267,7 @@ Camera-IMU 联合标定
 
 - https://blog.csdn.net/zhubaohua_bupt/article/details/80222321
 - https://github.com/ethz-asl/kalibr
+
+相机和激光雷达标定实战
+
+- https://github.com/Robotislove/dlonng.github.io/blob/master/_posts/2020-06-09-autoware-calibr-1.md
