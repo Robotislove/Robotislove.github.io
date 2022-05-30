@@ -1,0 +1,113 @@
+---
+layout: post
+title: BiSeNet: Bilateral Segmentation Network for Real-time Semantic Segmentation（论文阅读）
+date: 2022-05-30
+author: lau
+tags: [SemanticSegmentation, Archive]
+comments: true
+toc: true
+pinned: false
+---
+
+因为准备做激光雷达和图像联合语义分割实验，现目前效果比较好的是BiSeNet，打算看看此类网络。
+
+<!-- more -->
+
+## 摘要
+
+语义分割既需要丰富的空间信息，又需要相当大的感受野。然而，现代方法通常会牺牲空间分辨率来实现实时推理速度，这导致了较差的性能。本文提出双分支网络-BiSeNet。首先设计了一个小步长的Spatial Path，来保存空间信息并生成高分辨率的特征。同时，采用具有快速下采样策略的上下文路径Context Path 来获得足够的感受野。在这两分支之上，我们引入了一种新的特征融合模块Feature Fusion Module来对特征进行合理的融合。
+
+## 引言
+
+实时语义分割算法中，主要有三种方法加速模型，A通过crop裁剪或resize调整大小来限制输入图形大小以降低计算复杂度，（对边界的预测不友好）；B剪枝prune网络通道，提高推理速度；C drop the last stage （ENet）。以上，牺牲精度换取速度，如图1a所示
+
+![](https://img-blog.csdnimg.cn/20210513163925728.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NjcwNzY3Nw==,size_16,color_FFFFFF,t_70)
+
+为了弥补上述空间细节的缺失，广泛使用U型结构。通过融合骨干网的层次化特征，U型结构逐渐提高了空间分辨率，填补了一些缺失的细节。两个缺点，A完整的U型结构会降低模型的速度，因为高分辨率特征图引入了额外的计算；B通过剪枝和裁剪pruning or cropping丢失的空间信息不易恢复。U型结构只是一种该问题的缓解方案。如图1b所示。
+
+基于以上问题，提出Bilateral Segmentation Network (BiSeNet) 。Spatial Path (SP) 处理空间信息的丢失；仅堆放三个卷积层，特征图分辨率下降1/8，包含丰富的空间细节。 Context Path (CP)处理感受野的减小；在Xception的尾部添加了一个全局平均池化层global average pooling，其感受野是骨干网的最大值。如图1c所示。
+
+为了在不损失速度的情况下最求精度，提出Feature Fusion Module (FFM)用于特征融合，Attention Refinement Module (ARM)用于最后预测的微调。
+
+主要贡献：
+
+- 将 decouple the function of spatial information preservation and receptive field offering into two paths，对应于空间路径和上下文路径。
+
+- 设计了 Feature Fusion Module (FFM) and Attention Refinement Module (ARM)用于提升精度且不增加过多代价。
+
+- 实验效果不错。
+
+## 相关工作
+
+1.Spatial information:卷积神经网络用连续的下采样以编码高层语义信息，而空间信息对于语义分割是至关重要的。一些方法致力于对丰富的空间信息进行编码。 DUC、PSPNet 、DeepLab v2 和Deeplab v3用带孔卷积保留特征图的空间信息。Global Convolution Network 用“large kernel”扩大感受野。
+
+2.U-Shape method: U型结构可以恢复一定程度的空间信息。xxxxx。但一些丢失的空间信息不可能轻易恢复。
+
+3.Context information: 大多数常用的方法是扩大感受野或融合不同的上下文信息。
+
+4.Attention mechanism
+
+5.Real time segmentation
+
+## Bilateral Segmentation Network
+
+![](https://img-blog.csdnimg.cn/20210513185806920.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NjcwNzY3Nw==,size_16,color_FFFFFF,t_70)
+
+### Spatial path
+
+在语义分割方面，一些方法试图保持输入图像的分辨率，通过膨胀卷积来编码足够的空间信息，而一些方法试图通过金字塔池化模块pyramid pooling module、空洞空间金字塔池化或“large kernel”来捕捉潜在的感受野。这些方法表明，空间信息和感受野是实现高精度的关键。然而，要同时满足这两个要求是很难的。特别是在实时语义分割的情况下，部分方法利用小的输入图像或轻量级模型来加速。较小的输入图像丢失了原始图像的大部分空间信息，而轻量级模型通过通道剪枝破坏了空间信息。
+
+于是，本文提出了一种Spatial Path来保持原始输入图像的空间尺寸，并对图像的空间信息进行编码。Spatial Path有三个层，每层是步长为2的conv+BN+ReLU。该路径提取的输出特征地图是原始图像的1/8。如图2(A)。
+
+### Context path
+
+上下文路径则被设计成提供足够的感受野。在语义分割任务中，感受野对任务的执行起着重要的作用。为了扩大接受范围，一些方法利用了金字塔池化模块[、空洞空间金字塔池化或“large kernel”。但是，这些运算需要大量的计算和内存消耗，导致运算速度较慢。
+
+本文Context Path上下文路径利用轻量级模型和全局平均池化来提供更大的接受野。本文中，轻量化的模型采用Xception，可以快速地对特征图进行下采样，以获得大的接受野，该感受野对高层语义上下文信息编码。然后，在轻量化模型的最后添加了一个global average pooling全局平均池，它可以为最大感受野提供全局上下文信息？。最后，将全局池化的上采样输出特征与轻量化模型的特性相结合。在轻量化模型中，采用U型结构融合后两个阶段的特征，这是一个不完全的U型结构。图2(A)所示。
+Attention refinement module：在 Context Path中，提出了一个Attention Refinement Module(ARM)来调整每个阶段的特征。如图2(B)所示，ARM使用global average pooling 来捕获全局上下文，并计算注意力向量attention vector来指导特征学习。这种设计可以refine 上下文路径中每个阶段的输出特征。它不需要任何上采样操作，就可以很容易地集成全局上下文信息。因此，它所需的计算开销可以忽略不计。
+
+### Network architecture
+
+用预训练的Xception作为Context Path的backbone ，使用带步长的三个卷积层作为 Spatial Path。然后对这两条路径的输出特征进行融合，得到最终的预测结果。首先，尽管 Spatial Path的空间尺寸很大，但它只有三个卷积层，因此，它不是计算密集型的。对于Context Path，使用了一个轻量化模型来快速下采样。此外，这两条路径并行计算，大大提高了效率。其次，Spatial Path空间路径编码了丰富的空间信息，而Context Path上下文路径提供了更大的接受野。
+
+Feature fusion module:这两个分支的特征在feature representation的层次上是不同的。Spatial Path所捕获的空间信息大多编码了丰富的细节信息。此外，Context Path的输出特征主要对上下文信息进行编码。换言之，Spatial Path的输出特征是低水平的，而Context Path的输出特征是高水平的。因此，我们提出了Feature Fusion Module 来融合这些特征。
+
+考虑到特征的不同层次，首先将Spatial Path和Context Path的输出特征concat。然后，利用BN来平衡特征的尺度。接下来，将concat的特征集中到一个特征向量中，并计算一个权重向量，就像Senet一样。 该权重向量可以对特征重新加权，这相当于特征选择和组合。如图2©所示。
+
+Loss function:主损失函数来监督整个BiSeNet的输出。添加了两个辅助损失函数来监督上下文路径的输出。所有的损失函数都是Softmax loss。（a=1,k=3）（仅在训练时用辅助损失）
+
+![](https://img-blog.csdnimg.cn/20210513193611854.png)
+
+## Experimental Results
+### 设置
+
+- 网络：Spatial Path为三个卷积层，Context Path为 Xception39 model，然后用Feature Fusion Module将两个分支进行融合得到最后的结果。Spatial Path的输出以及最后的预测结果输出分辨率为原图的1/8
+
+- 训练细节：SGD，batch size=16，momentum=0.9，weight decay=e^(-4)， 学习率策略：poly其中power为0.9，初始学习率为2.5xe^(-2)
+
+- 数据增强：均值减法、随机水平翻转和随机缩放，最后随机crop到固定尺寸
+
+### 消融实验
+
+- Baseline
+
+- Ablation for U-shape
+
+- Ablation for spatial path
+
+- Ablation for attention refinement module
+
+- Ablation for feature fusion module
+
+- Ablation for global average pooling
+
+
+### 精度和速度分析
+
+-  Speed analysis
+- Accuracy analysis
+
+### 总结
+
+同时提升实时语义分割的速度和精度，两个分支，在Cityscapes测试集上有105FPS、68.4%mIOU。
+
