@@ -3,7 +3,7 @@ layout: post
 title: 实操性很强的阅读文献方法（台湾彭明辉教授）
 date: 2022-08-5
 author: lau
-tags: [SLAM, Archive]
+tags: [Archive]
 comments: true
 toc: true
 pinned: false
