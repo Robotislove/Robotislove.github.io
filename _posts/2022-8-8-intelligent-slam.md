@@ -12,8 +12,29 @@ SLAM学习入门与相关知识笔记。
 
 <!-- more -->
 
-## SLAM算法总结——经典SLAM算法框架总结
+## SLAM算法总结
 
+### SLAM基础知识
+[多视图几何总结——基础矩阵、本质矩阵和单应矩阵的求解过程](https://blog.csdn.net/weixin_44580210/article/details/90116621)
+
+[视觉SLAM总结——后端总结](https://blog.csdn.net/weixin_44580210/article/details/90573282)
+
+[[V-SLAM] Bundle Adjustment 实现](https://zhuanlan.zhihu.com/p/64471565)
+
+[Karto slam源码阅读(一) 主流程](https://zhuanlan.zhihu.com/p/493303177)
+
+[Hector slam的后端优化](https://zhuanlan.zhihu.com/p/493322053)
+
+[SLAM轨迹评估工具evo](https://zhuanlan.zhihu.com/p/498614224)
+
+[VINS_MONO预积分](https://www.zhihu.com/column/slamTech)
+
+[ORB-SLAM3源码阅读(一) 初始化](https://zhuanlan.zhihu.com/p/510748490)
+
+[自己从零手写一个激光slam](https://github.com/softdream/Slam-Project-Of-MyOwn)
+
+[ESKF误差卡尔玛滤波](https://zhuanlan.zhihu.com/p/441182819)
+### 经典SLAM算法框架总结
 首先，按照我的理解，我梳理了如下一个思维导图，如果读者发现有什么需要补充或者纠正的欢迎随时交流：
 ![](https://img-blog.csdnimg.cn/d35d5ae2a0d64325abbc1aad38b08ce0.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBASmljaGFvX1Blbmc=,size_20,color_FFFFFF,t_70,g_se,x_16)
 
