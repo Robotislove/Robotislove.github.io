@@ -102,10 +102,14 @@ cam1:
 imu标定采用[imu_utils](https://github.com/gaowenliang/imu_utils)
 
 1. 安装依赖项
+
+
 ```
 sudo apt-get install libdw-dev
 ```
 2. 下载imu_utils和code_utils并放入工作空间进行编译
+
+
 - imu_utils下载地址为：https://github.com/gaowenliang/imu_utils
 - code_utils下载地址为： https://github.com/gaowenliang/code_utils
 
@@ -123,18 +127,131 @@ sudo apt-get install libdw-dev
 编译报错：执行`sudo apt-get install ros-kinetic-bfl`过程中无法定位包，(找不到链接了，回来补上，按照ubuntu无法定位包的问题来搜索).
 
 4. 录制imu.bag
+
+
 保持IMU静止不动至少两个小时，录制IMU的bag
 ```
 rosbag record /imu -O imu
 ```
 
 5. 根据需求修改launch文件
+
+
 根据自己的需求对src/imu_utils-master/launch文件进行修改：主要包括名字、时长之类的； 比如: mynt_imu.launch
 ![](https://img-blog.csdnimg.cn/20200917105258708.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FpbnFpbnhpYW5zaGVuZw==,size_16,color_FFFFFF,t_70#pic_center)
 
 6. 运行标定程序
-运行bag文件
 
+
+运行bag文件
+```
+roscore
+rosbag play -r 200　imu_utils/imu.bag
+```
+运行launch文件
+```
+cd imu_ws
+source ./devel/setup.bash
+roslaunch imu_utils mynt_imu.launch
+```
+其中 -r 200是指200速播放bag数据，不可能真等两个小时2333333333333
+
+7. 标定结果
+
+标定完成后，可在data文件中找到对应的yaml文件src/imu_utils/data/m210_imu_param.yaml
+
+![](https://img-blog.csdnimg.cn/20200917104954512.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FpbnFpbnhpYW5zaGVuZw==,size_16,color_FFFFFF,t_70#pic_center)
+
+标定好的参数包括各方向的随机噪声与随机游走，如下所示：
+```
+%YAML:1.0
+---
+type: IMU
+name: m210
+Gyr:
+   unit: " rad/s"
+   avg-axis:
+      gyr_n: 1.1016440992489866e-03
+      gyr_w: 5.7968344392887427e-06
+   x-axis:
+      gyr_n: 1.2601308952358316e-03
+      gyr_w: 6.6549144466689008e-06
+   y-axis:
+      gyr_n: 9.1639862355727669e-04
+      gyr_w: 4.5920115983527386e-06
+   z-axis:
+      gyr_n: 1.1284027789538512e-03
+      gyr_w: 6.1435772728445881e-06
+Acc:
+   unit: " m/s^2"
+   avg-axis:
+      acc_n: 5.1380013730273288e-02
+      acc_w: 1.7544697355051581e-03
+   x-axis:
+      acc_n: 3.1145378555559291e-02
+      acc_w: 2.9961069437766212e-03
+   y-axis:
+      acc_n: 7.0380818146931270e-02
+      acc_w: 1.9377334256450410e-03
+   z-axis:
+      acc_n: 5.2613844488329294e-02
+      acc_w: 3.2956883709381275e-04
+```
+
+### imu+双目联合标定
+
+与kalibr标定双目的过程类似，这次在IMU-camera calibration例子的基础上标定imu与camera
+
+首先以上两次标定结果修改.yaml参数,包括标定结果，话题类型，频率等信息
+
+运行命令进行标定
+
+```
+kalibr_calibrate_imu_camera --target april_6x6.yaml --cam camchain.yaml --imu imu_adis16448.yaml --bag /home/dji/db/stero_dji_kalibr/stereo/imu_stereo_subset.bag --bag-from-to 5 45
+```
+
+运行时需要注意路径
+
+**标定结果：**
+
+.txt文件中的部分结果,最重要的是相机与imu之间的变换矩阵
+
+```
+Calibration results
+===================
+Normalized Residuals
+----------------------------
+Reprojection error (cam0):     mean 0.126389437034, median 0.117608381877, std: 0.0673478862055
+Reprojection error (cam1):     mean 0.132576172002, median 0.12130080264, std: 0.0739372479366
+Gyroscope error (imu0):        mean 0.000146638755352, median 3.16696236165e-07, std: 0.0014737840839
+Accelerometer error (imu0):    mean 1.14000452874e-06, median 1.02723705118e-08, std: 6.0143590628e-06
+
+Residuals
+----------------------------
+Reprojection error (cam0) [px]:     mean 0.126389437034, median 0.117608381877, std: 0.0673478862055
+Reprojection error (cam1) [px]:     mean 0.132576172002, median 0.12130080264, std: 0.0739372479366
+Gyroscope error (imu0) [rad/s]:     mean 5.18446291471e-06, median 1.11969028084e-08, std: 5.21061359864e-05
+Accelerometer error (imu0) [m/s^2]: mean 8.06104932854e-08, median 7.26366284774e-10, std: 4.2527940778e-07
+
+Transformation (cam0):
+-----------------------
+T_ci:  (imu0 to cam0): 
+[[-0.02093225 -0.99971259  0.01168657 -0.00021865]
+ [ 0.13518962 -0.01441203 -0.99071492 -0.00086208]
+ [ 0.99059861 -0.01915798  0.13545244  0.00014753]
+ [ 0.          0.          0.          1.        ]]
+
+T_ic:  (cam0 to imu0): 
+[[-0.02093225  0.13518962  0.99059861 -0.00003417]
+ [-0.99971259 -0.01441203 -0.01915798 -0.00022818]
+ [ 0.01168657 -0.99071492  0.13545244 -0.00087151]
+ [ 0.          0.          0.          1.        ]]
+
+timeshift cam0 to imu0: [s] (t_imu = t_cam + shift)
+0.000336885304337
+```
+
+![](https://img-blog.csdnimg.cn/20200917105744831.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FpbnFpbnhpYW5zaGVuZw==,size_16,color_FFFFFF,t_70#pic_center)
 
 
 
