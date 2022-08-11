@@ -37,7 +37,7 @@ pinned: false
 
 为了之后imu和相机联合标定，这里我们采集双目和imu的数据。如果你已经有了通过 ROS 发布 image 和imu消息的节点, 我们只需要使用 rosbag record 工具将拍摄到的标定板图像制作成 bag 文件就行了。
 
-**注意: ** 
+**注意** 
 
 通常设备采集的频率为 20-60 hz, 这会使得标定的图像过多, 而导致计算量太大. 最好将ros topic的频率降低到4hz左右进行采集.
 
@@ -261,3 +261,5 @@ timeshift cam0 to imu0: [s] (t_imu = t_cam + shift)
 [2] [Kalibr使用：imu+camera联合标定过程详解](https://blog.csdn.net/qinqinxiansheng/article/details/108629530?spm=1001.2101.3001.6650.3&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-3-108629530-blog-124291667.pc_relevant_multi_platform_whitelistv3&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-3-108629530-blog-124291667.pc_relevant_multi_platform_whitelistv3&utm_relevant_index=6)
 
 [3] [双目相机 -- IMU联合标定](https://blog.csdn.net/weixin_48592526/article/details/124291667)
+
+[4] [双目相机与IMU联合标定](https://blog.csdn.net/qq_34935373/article/details/122563824) （上面流程不懂的地方，可以配合看下面几个链接，尤其是本链接，讲得很详细！）
