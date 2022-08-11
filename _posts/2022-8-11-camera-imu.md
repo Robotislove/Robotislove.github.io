@@ -263,3 +263,5 @@ timeshift cam0 to imu0: [s] (t_imu = t_cam + shift)
 [3] [双目相机 -- IMU联合标定](https://blog.csdn.net/weixin_48592526/article/details/124291667)
 
 [4] [双目相机与IMU联合标定](https://blog.csdn.net/qq_34935373/article/details/122563824) （上面流程不懂的地方，可以配合看下面几个链接，尤其是本链接，讲得很详细！）
+
+[5] [技术分享 | 带你实现IMU和双目相机的联合标定](https://www.bilibili.com/read/cv12565159/) （还有此链接！）
