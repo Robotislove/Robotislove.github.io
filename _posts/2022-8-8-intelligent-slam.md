@@ -42,6 +42,8 @@ SLAM学习入门与相关知识笔记。
 [BA视觉SLAM解析](https://www.cnblogs.com/Jessica-jie/p/7739775.html)
 
 [VIO回顾：从滤波和优化的视角](https://mp.weixin.qq.com/s/zpZERtWPKljWNAiASBLJxA)
+
+[重投影误差](https://www.cnblogs.com/Jessica-jie/p/7242179.html)
 ### 经典SLAM算法框架总结
 首先，按照我的理解，我梳理了如下一个思维导图，如果读者发现有什么需要补充或者纠正的欢迎随时交流：
 ![](https://img-blog.csdnimg.cn/d35d5ae2a0d64325abbc1aad38b08ce0.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBASmljaGFvX1Blbmc=,size_20,color_FFFFFF,t_70,g_se,x_16)
