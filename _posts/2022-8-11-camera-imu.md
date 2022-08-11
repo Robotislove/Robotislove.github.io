@@ -254,4 +254,10 @@ timeshift cam0 to imu0: [s] (t_imu = t_cam + shift)
 ![](https://img-blog.csdnimg.cn/20200917105744831.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FpbnFpbnhpYW5zaGVuZw==,size_16,color_FFFFFF,t_70#pic_center)
 
 
+### 参考文献
 
+[1] [Kalibr 之 Camera-IMU 标定 (总结)](https://github.com/cggos/cggos.github.io/blob/c691cf45efa30a669f0ccd7b23c86c12d6e1152f/source\_/posts/robotics/2018-10-23-kalibr-camera-imu.md)
+
+[2] [Kalibr使用：imu+camera联合标定过程详解](https://blog.csdn.net/qinqinxiansheng/article/details/108629530?spm=1001.2101.3001.6650.3&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-3-108629530-blog-124291667.pc_relevant_multi_platform_whitelistv3&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-3-108629530-blog-124291667.pc_relevant_multi_platform_whitelistv3&utm_relevant_index=6)
+
+[3] [双目相机 -- IMU联合标定](https://blog.csdn.net/weixin_48592526/article/details/124291667)
