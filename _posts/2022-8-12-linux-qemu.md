@@ -300,8 +300,57 @@ sysbus_init_mmio(SYS_BUS_DEVICE(obj), &s->mmio);
 ```
 
 ### 中断仿真
+#### qemu中断模型
+qemu使用GPIO来实现中断系统，其简单的原理如下
 
-略
+Device.[GPIO_OUT] ->[GPIO_IN].GIC.[GPIO_OUT]->[GPIO_IN].core
+
+1、首先CPU有GPIO_IN接口；
+
+2、然后中断控制器（GIC）有GPIO_IN和GPIO_OUT， GPIO_OUT和CPU的GPIO_IN接口关联；
+
+3、设备的GPIO_OUT和GIC的GPIO_IN关联；
+
+4、当有中断发生时，设备通过GPIO_OUT通知GIC，GIC通过GPIO_OUT通知GPIO_IN。
+
+中断依赖qemu_irq结构体：
+```c++
+struct IRQState {
+    Object parent_obj;
+
+    qemu_irq_handler handler; //irq handler
+    void *opaque;
+    int n; // irq num
+};
+```
+
+要触发一个irq，可以使用qemu_set_irq函数
+
+```c++
+void qemu_set_irq(qemu_irq irq, int level)
+{
+    if (!irq)
+        return;
+
+    irq->handler(irq->opaque, irq->n, level);
+}
+```
+GPIO_IN通过qdev_init_gpio_in初始化
+```c++
+void qdev_init_gpio_in(DeviceState *dev, qemu_irq_handler handler, int n)
+```
+初始化n个GPIO_IN接口，每个GPIO_IN接口的回调函数为handler，实际就是新建n个qemu_irq对象，qemu_irq的回调函数为handler。
+
+GPIO_OUT初始化函数为sysbus_init_irq
+```c++
+/* Request an IRQ source.  The actual IRQ object may be populated later.  */
+void sysbus_init_irq(SysBusDevice *dev, qemu_irq *p)
+```
+qemu使用sysbus_connect_irq将GPIO_OUT和GPIO_IN关联
+```c++
+void sysbus_connect_irq(SysBusDevice *dev, int n, qemu_irq irq)
+```
+把dev中的第n个gpio_out和irq关联，实际就是把irq保存为第n个gpio_out的值。
 ### 固件加载
 
 netduinoplus2_init在初始化stm32f405-soc后，调用armv7m_load_kernel加载二进制到内存
