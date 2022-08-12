@@ -299,7 +299,63 @@ static const uint32_t usart_addr[] = { 0x40011000, 0x40004400, 0x40004800,
 sysbus_init_mmio(SYS_BUS_DEVICE(obj), &s->mmio);
 ```
 
+### 中断仿真
 
+略
+### 固件加载
+
+netduinoplus2_init在初始化stm32f405-soc后，调用armv7m_load_kernel加载二进制到内存
+```c++
+void armv7m_load_kernel(ARMCPU *cpu, const char *kernel_filename, int mem_size)
+{
+    int image_size;
+    uint64_t entry;
+    int big_endian;
+    AddressSpace *as;
+    int asidx;
+    CPUState *cs = CPU(cpu);
+
+#ifdef TARGET_WORDS_BIGENDIAN
+    big_endian = 1;
+#else
+    big_endian = 0;
+#endif
+
+    if (arm_feature(&cpu->env, ARM_FEATURE_EL3)) {
+        asidx = ARMASIdx_S;
+    } else {
+        asidx = ARMASIdx_NS;
+    }
+    as = cpu_get_address_space(cs, asidx);
+
+    if (kernel_filename) {
+        image_size = load_elf_as(kernel_filename, NULL, NULL, NULL,
+                                 &entry, NULL, NULL,
+                                 NULL, big_endian, EM_ARM, 1, 0, as);
+        if (image_size < 0) {
+            image_size = load_image_targphys_as(kernel_filename, 0,
+                                                mem_size, as);
+        }
+        if (image_size < 0) {
+            error_report("Could not load kernel '%s'", kernel_filename);
+            exit(1);
+        }
+}
+
+```
+1、machine->kernel_filename通过命令的 -kernel 选项指定
+
+2、armv7m_load_kernel首先尝试调用load_elf_as以elf格式加载
+
+3、如果加载失败，就调用 load_image_targphys_as 直接把文件加载到0地址处
+
+
+### 参考文档
+[1] st公司发布stm32f4xx技术参考文档: https://www.st.com/resource/en/reference_manual/rm0090-stm32f405415-stm32f407417-stm32f427437-and-stm32f429439-advanced-armbased-32bit-mcus-stmicroelectronics.pdf
+
+[2] 文章介绍了stm32f205 qemu实现: https://forum.butian.net/share/124
+
+[3] 文章介绍了基于qemu实现监控基本块、指令级别的监控，支持观察点、断点的设置，支持mmio内存的申请等：https://forum.butian.net/share/123
 
 
 
