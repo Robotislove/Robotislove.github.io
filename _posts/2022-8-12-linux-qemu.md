@@ -507,6 +507,49 @@ void armv7m_load_kernel(ARMCPU *cpu, const char *kernel_filename, int mem_size)
 
 3、如果加载失败，就调用 load_image_targphys_as 直接把文件加载到0地址处
 
+<table>
+<thead>
+<tr>
+<th align="left">函数</th>
+<th align="left">路径</th>
+<th align="left">注释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">main_loop</td>
+<td align="left">/vl.c</td>
+<td align="left">判断运行状态</td>
+</tr>
+<tr>
+<td align="left">qemu_main_loop_start</td>
+<td align="left">/cpus.c</td>
+<td align="left">分时运行 CPU 核</td>
+</tr>
+<tr>
+<td align="left">struct CPUState</td>
+<td align="left">/target-xyz/cpu.h</td>
+<td align="left">CPU 状态结构体</td>
+</tr>
+<tr>
+<td align="left">cpu_exec</td>
+<td align="left">/cpu_exec.c</td>
+<td align="left">主要执行循环</td>
+</tr>
+<tr>
+<td align="left">struct TranslationBlock</td>
+<td align="left">/exec-all.h</td>
+<td align="left">TB（二进制翻译代码块）结构体</td>
+</tr>
+<tr>
+<td align="left">cpu_gen_code</td>
+<td align="left">translate-all.c</td>
+<td align="left">初始化真正的代码生成</td>
+</tr>
+<tr>
+<td align="left">tcg_gen_code</td>
+<td align="left">/tcg/tcg.c</td>
+<td align="left">tcg 代码翻译成 host 代码</td>
+</tr>
 
 ### 参考文档
 [1] st公司发布stm32f4xx技术参考文档: https://www.st.com/resource/en/reference_manual/rm0090-stm32f405415-stm32f407417-stm32f427437-and-stm32f429439-advanced-armbased-32bit-mcus-stmicroelectronics.pdf
