@@ -42,11 +42,56 @@ CMake的优势
 CMake使用的情况：Android App中的so，各种知名开源库：KDE 4、OpenCV、dlib、Qt...
 
 ## 一个简单的CMake
+```makefile
+cmake_minimum_required(VERSION 3.10)
+project(cdecl)
 
+set(CMAKE_CXX_STANDARD 17)
+
+add_executable(cdecl main.cpp)
+
+# 需要CMake的最小版本
+cmake_minimum_required(VERSION 3.10)
+# 整个项目的名称，只能有一个
+project(cmake_test VERSION 0.1.0)
+
+SET(CMAKE_CXX_FLAGS_DEBUG "$ENV{CXXFLAGS} -O0 -Wall -g -ggdb")
+SET(CMAKE_CXX_FLAGS_RELEASE "$ENV{CXXFLAGS} -O3 -Wall ")
+
+# 可以设置不同的编译器，可以不是gcc
+# set(TOOLCHAIN_PREFIX "arm-none-eabi-")
+
+set(CMAKE_C_COMPILER ${TOOLCHAIN_PREFIX}gcc)
+
+# gcc中-I后面的内容
+include_directories(${CMAKE_CURRENT_LIST_DIR}/include)
+
+## 让CMakeFiles.txt可以简便地include *.cmake文件，无需描述全路径
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_ROOT_DIR})
+
+## 输出编译命令列表到compile_commands.json文件
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+# 把c文件名赋值给变量FULL_SRCS
+# set(FULL_SRCS main.c calc.c)
+
+# 自动遍历当前目录，并把.c文件全部加进来
+
+aux_source_directory(. FULL_SRCS)
+
+# 去运行src目录下的CMakeFiles.txt
+add_subdirectory(src)
+
+# 可执行文件main由FULL_SRCS所指定的文件组成
+# 一个project里可以有多个executables
+add_executable(main ${FULL_SRCS})
+```
 
 其实这不是最简单的CMakeLists.txt，CMake中变量的赋值和引用的表达方式是不一样的，一个Project中可以包含多个executables、libraries。CMake会生成一大堆你不想看的中间文件，我一般是单独建立一个和根CMakeLists.txt同级的子目录build，然后到里面去键入“cmake ../”
 。`aux_source_directory(. FULL_SRCS)`可以将当前目录下的所有c文件添加到变量FULL_SRCS中。如果仅仅修改过源代码，却没有修改过CMakeLists.txt，是不需要重新CMake的，直接make就是了
 可以让这两个c文件include一个.h文件，然后修改.h文件的内容，直接make，看看自动依赖是否生效。
+
+## CMake的target
 
 
 
