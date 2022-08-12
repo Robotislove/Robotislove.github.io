@@ -234,6 +234,71 @@ for (i = 0; i < STM_NUM_USARTS; i++) {
         sysbus_connect_irq(busdev, 0, qdev_get_gpio_in(armv7m, usart_irq[i]));
 }
 ```
+s->usart在stm32f405_soc_initfn中创建
+
+```c++
+static void stm32f405_soc_initfn(Object *obj)
+{
+    STM32F405State *s = STM32F405_SOC(obj);
+    int i;
+
+    object_initialize_child(obj, "armv7m", &s->armv7m, TYPE_ARMV7M);
+
+    object_initialize_child(obj, "syscfg", &s->syscfg, TYPE_STM32F4XX_SYSCFG);
+
+for (i = 0; i < STM_NUM_USARTS; i++) {
+
+        object_initialize_child(obj, "usart[*]", &s->usart[i],
+                                TYPE_STM32F2XX_USART);
+}
+```
+实际就是创建了TYPE_STM32F2XX_USART设备。
+```c++
+static const TypeInfo stm32f2xx_usart_info = {
+    .name          = TYPE_STM32F2XX_USART,
+    .parent        = TYPE_SYS_BUS_DEVICE,
+    .instance_size = sizeof(STM32F2XXUsartState),
+    .instance_init = stm32f2xx_usart_init,
+    .class_init    = stm32f2xx_usart_class_init,
+};
+```
+
+调用sysbus_init_child_obj函数初始化设备时会调用stm32f2xx_usart_init
+
+```c++
+static void stm32f2xx_usart_init(Object *obj)
+{
+    STM32F2XXUsartState *s = STM32F2XX_USART(obj);
+
+    sysbus_init_irq(SYS_BUS_DEVICE(obj), &s->irq);
+
+    memory_region_init_io(&s->mmio, obj, &stm32f2xx_usart_ops, s,
+                          TYPE_STM32F2XX_USART, 0x400);
+    sysbus_init_mmio(SYS_BUS_DEVICE(obj), &s->mmio);
+}
+```
+
+函数做的工作如下
+
+1、初始化设备的irq，保存到s->irq;
+
+2、初始化s->mmio，设置memory_region的大小为0x400，mmio内存访问的回调函数由stm32f2xx_usart_ops指定;
+
+3、sysbus_init_mmio主要是把s->mmio的指针保存到设备mmio数组中，以便后续使用sysbus_mmio_map把memory_region挂载到对应的地址。
+
+#### mmio映射
+stm32f405-soc实现了8个uart设备，设备mmio的起始地址分别为
+```c++
+static const uint32_t usart_addr[] = { 0x40011000, 0x40004400, 0x40004800,
+                                  0x40004C00, 0x40005000, 0x40011400,
+                                  0x40007800, 0x40007C00 };
+```
+
+然后在stm32f405_soc_realize函数里面会调用sysbus_mmio_map把设备的memory_region挂载到指定的位置。
+```c++
+sysbus_init_mmio(SYS_BUS_DEVICE(obj), &s->mmio);
+```
+
 
 
 
