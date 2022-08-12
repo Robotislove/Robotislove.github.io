@@ -154,6 +154,82 @@ static const TypeInfo stm32f405_soc_info = {
 
 ```
 
+下面分析stm32f405_soc_realize的实现.
+
+### 初始化flash和sram
+stm32f405_soc_realize主要实现了红框标注的三个内存区域
+
+1、位于0x8000000处的flash区域
+
+2、位于0x0处的区域，是flash的alias区域
+
+3、位于0x20000000处的sram区域
+
+函数入口首先设置了flash和sram.
+```c++
+static void stm32f405_soc_realize(DeviceState *dev_soc, Error **errp)
+{
+STM32F405State *s = STM32F405_SOC(dev_soc);
+    MemoryRegion *system_memory = get_system_memory();
+    DeviceState *dev, *armv7m;
+    SysBusDevice *busdev;
+    Error *err = NULL;
+int i;
+
+    memory_region_init_rom(&s->flash, OBJECT(dev_soc), "STM32F405.flash",
+                           FLASH_SIZE, &err);
+    if (err != NULL) {
+        error_propagate(errp, err);
+        return;
+    }
+    memory_region_init_alias(&s->flash_alias, OBJECT(dev_soc),
+                             "STM32F405.flash.alias", &s->flash, 0,
+                             FLASH_SIZE);
+
+    memory_region_add_subregion(system_memory, FLASH_BASE_ADDRESS, &s->flash);
+    memory_region_add_subregion(system_memory, 0, &s->flash_alias);
+
+    memory_region_init_ram(&s->sram, NULL, "STM32F405.sram", SRAM_SIZE,
+                           &err);
+```
+
+1、主要就是新建flash区域和flash_alias，然后通过memory_region_add_subregion把这两个区域放到对应的地址，这样0x0和0x8000000实际指向的是同一块RAM。
+
+2、然后新建sram区域，并把sram放到0x20000000处。
+
+根据需要模拟仿真固件的实际FLASH、SRAM参数可以配置不同的FLASH启动加载地址和大小、SRAM启动地址和大小。
+```c++
+#define FLASH_BASE_ADDRESS 0x08000000
+#define FLASH_SIZE (1024 * 1024)
+#define SRAM_BASE_ADDRESS 0x20000000
+#define SRAM_SIZE (320 * 1024)
+```
+
+### 初始化外设
+在初始化flash和sram后，会逐步初始化用到的外设，这里以UART外设为例进行介绍。
+#### UART外设初始化
+uart使用sysbus_mmio_map把外设的寄存器区域映射为mmio内存，然后使用sysbus_connect_irq初始化外设需要的irq。
+```c++
+/* Attach UART (uses USART registers) and USART controllers */
+for (i = 0; i < STM_NUM_USARTS; i++) {
+
+        dev = DEVICE(&(s->usart[i]));
+
+        qdev_prop_set_chr(dev, "chardev", serial_hd(i));
+
+        if (!sysbus_realize(SYS_BUS_DEVICE(&s->usart[i]), errp)) {
+            return;
+        }
+
+        busdev = SYS_BUS_DEVICE(dev);
+
+        sysbus_mmio_map(busdev, 0, usart_addr[i]);
+
+        sysbus_connect_irq(busdev, 0, qdev_get_gpio_in(armv7m, usart_irq[i]));
+}
+```
+
+
 
 
 
