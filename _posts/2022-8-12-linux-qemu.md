@@ -25,7 +25,6 @@ QEMU主要有两种仿真方式：
 
 - 系统模式仿真：允许仿真完整的系统，包括处理器和配套的外设，该模式下，QEMU 也可以作为系统虚拟机
 
-
 ## Qemu安装
 ### Qemu下载
 Qemu 官方下载地址：https://www.qemu.org/download/
@@ -39,6 +38,13 @@ make –j32
 make install
 ```
 ./configure --prefix配置本地安装路径.
+### Qemu源码目录
+
+- /vl.c: 最主要的模拟循环，虚拟机环境初始化，和 CPU 的执行。
+- /target-arch/translate.c: 将 guest 代码翻译成不同架构的 TCG 操作码。
+- /tcg/tcg.c: 主要的 TCG 代码。
+- /tcg/arch/tcg-target.c: 将 TCG 代码转化生成主机代码。
+- /cpu-exec.c: 主要寻找下一个二进制翻译代码块，如果没有找到就请求得到下一个代码块，并且操作生成的代码块。
 
 ### Qemu仿真系统
 首先我们需要从debian官网下载kernel和image，地址如下：
