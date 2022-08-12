@@ -514,6 +514,11 @@ void armv7m_load_kernel(ARMCPU *cpu, const char *kernel_filename, int mem_size)
 
 [3] 文章介绍了基于qemu实现监控基本块、指令级别的监控，支持观察点、断点的设置，支持mmio内存的申请等：https://forum.butian.net/share/123
 
+[4] QEMU Internals Slides:https://www.csd.uoc.gr/~hy428/reading/qemu-internals-slides-may6-2014.pdf
+
+[5] QEMU Tech:https://qemu.weilnetz.de/doc/2.7/qemu-tech.pdf
+
+[6] QEMU Internals:https://stuff.mit.edu/afs/sipb/project/phone-project/share/doc/qemu/qemu-tech.html
 **补充**
 
 <table>
