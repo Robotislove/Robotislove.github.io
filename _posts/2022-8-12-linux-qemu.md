@@ -507,6 +507,15 @@ void armv7m_load_kernel(ARMCPU *cpu, const char *kernel_filename, int mem_size)
 
 3、如果加载失败，就调用 load_image_targphys_as 直接把文件加载到0地址处
 
+### 参考文档
+[1] st公司发布stm32f4xx技术参考文档: https://www.st.com/resource/en/reference_manual/rm0090-stm32f405415-stm32f407417-stm32f427437-and-stm32f429439-advanced-armbased-32bit-mcus-stmicroelectronics.pdf
+
+[2] 文章介绍了stm32f205 qemu实现: https://forum.butian.net/share/124
+
+[3] 文章介绍了基于qemu实现监控基本块、指令级别的监控，支持观察点、断点的设置，支持mmio内存的申请等：https://forum.butian.net/share/123
+
+**补充**
+
 <table>
 <thead>
 <tr>
@@ -550,14 +559,6 @@ void armv7m_load_kernel(ARMCPU *cpu, const char *kernel_filename, int mem_size)
 <td align="left">/tcg/tcg.c</td>
 <td align="left">tcg 代码翻译成 host 代码</td>
 </tr>
-
-### 参考文档
-[1] st公司发布stm32f4xx技术参考文档: https://www.st.com/resource/en/reference_manual/rm0090-stm32f405415-stm32f407417-stm32f427437-and-stm32f429439-advanced-armbased-32bit-mcus-stmicroelectronics.pdf
-
-[2] 文章介绍了stm32f205 qemu实现: https://forum.butian.net/share/124
-
-[3] 文章介绍了基于qemu实现监控基本块、指令级别的监控，支持观察点、断点的设置，支持mmio内存的申请等：https://forum.butian.net/share/123
-
-
+</tbody></table>
 
 
