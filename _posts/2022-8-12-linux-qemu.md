@@ -351,6 +351,115 @@ qemu使用sysbus_connect_irq将GPIO_OUT和GPIO_IN关联
 void sysbus_connect_irq(SysBusDevice *dev, int n, qemu_irq irq)
 ```
 把dev中的第n个gpio_out和irq关联，实际就是把irq保存为第n个gpio_out的值。
+
+#### 实例分析
+比如在armv7m_nvic_realize调用qdev_init_gpio_in初始化num_irq个GPIO_IN
+```c++
+static void armv7m_nvic_realize(DeviceState *dev, Error **errp)
+{
+    NVICState *s = NVIC(dev);
+
+    /* The armv7m container object will have set our CPU pointer */
+    if (!s->cpu || !arm_feature(&s->cpu->env, ARM_FEATURE_M)) {
+        error_setg(errp, "The NVIC can only be used with a Cortex-M CPU");
+        return;
+    }
+
+    if (s->num_irq > NVIC_MAX_IRQ) {
+        error_setg(errp, "num-irq %d exceeds NVIC maximum", s->num_irq);
+        return;
+    }
+
+qdev_init_gpio_in(dev, set_irq_level, s->num_irq);
+```
+
+uart设备在stm32f2xx_usart_init函数中通过sysbus_init_irq初始化一个GPIO_OUT
+
+```c++
+static void stm32f2xx_usart_init(Object *obj)
+{
+    STM32F2XXUsartState *s = STM32F2XX_USART(obj);
+
+    sysbus_init_irq(SYS_BUS_DEVICE(obj), &s->irq);
+
+    memory_region_init_io(&s->mmio, obj, &stm32f2xx_usart_ops, s,
+                          TYPE_STM32F2XX_USART, 0x400);
+    sysbus_init_mmio(SYS_BUS_DEVICE(obj), &s->mmio);
+}
+
+```
+
+这样第0个GPIO就指向了s->irq。stm32f405_soc_realize会使用sysbus_connect_irq把设备的第0个GPIO和 nvic 的特定GPIO_IN进行关联。
+
+实质上就是把 `s->irq = qdev_get_gpio_in(armv7m, uart_irq[i])`。
+
+uart_irq 保存了每个uart设备需要使用的IRQ号
+```c++
+static const int usart_irq[] = { 37, 38, 39, 52, 53, 71, 82, 83 };
+```
+
+此外还有一个需要注意的点，这里的irq号和其在异常向量表中的位置存在以下关系
+
+IRQ 号 = IRQ处理函数在异常向量表中的序号 - CPU内置异常数目
+
+以stm32f405-soc为例，其使用的CPU为cortex-m4，CPU的内部中断数目为16个。
+
+uart设备在stm32f2xx_usart_write中需要触发特定中断时会调用
+```c++
+ switch (addr) {
+    case USART_SR:
+        if (value <= 0x3FF) {
+            /* I/O being synchronous, TXE is always set. In addition, it may
+               only be set by hardware, so keep it set here. */
+            s->usart_sr = value | USART_SR_TXE;
+        } else {
+            s->usart_sr &= value;
+        }
+        if (!(s->usart_sr & USART_SR_RXNE)) {
+            qemu_set_irq(s->irq, 0);
+        }
+        return;
+```
+
+s->irq 在之前使用sysbus_connect_irq时就被设置成nvic中对应irq的qemu_irq结构
+
+这里实际会调用set_irq_level通知nvic指定的中断到来
+
+```c++
+/* callback when external interrupt line is changed */
+static void set_irq_level(void *opaque, int n, int level)
+{
+    NVICState *s = opaque;
+    VecInfo *vec;
+
+    n += NVIC_FIRST_IRQ;
+
+    assert(n >= NVIC_FIRST_IRQ && n < s->num_irq);
+
+    trace_nvic_set_irq_level(n, level);
+
+    /* The pending status of an external interrupt is
+     * latched on rising edge and exception handler return.
+     *
+     * Pulsing the IRQ will always run the handler
+     * once, and the handler will re-run until the
+     * level is low when the handler completes.
+     */
+    vec = &s->vectors[n];
+    if (level != vec->level) {
+        vec->level = level;
+        if (level) {
+            armv7m_nvic_set_pending(s, n, false);
+        }
+    }
+}
+```
+主要就是根据IRQ号n，找到对应的异常信息 vec，然后判断vec的状态（高定平(level=1)，还是低电平(level=0)）。
+
+如果是高电平，则会进入armv7m_nvic_set_pending通知CPU中断到来，实际也是调用CPU之前注册的GPIO_IN的回调函数通知。
+
+因此qemu的中断实现其实是依赖于qemu_irq来实现，比如NVIC要通知CPU中断到来，实际就是调用CPU的qemu_irq中的回调函数实现。
+
 ### 固件加载
 
 netduinoplus2_init在初始化stm32f405-soc后，调用armv7m_load_kernel加载二进制到内存
