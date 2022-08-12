@@ -566,4 +566,6 @@ void armv7m_load_kernel(ARMCPU *cpu, const char *kernel_filename, int mem_size)
 </tr>
 </tbody></table>
 
-
+![](https://swordfaith.github.io/uploads/qemuArch.png)
+![](https://swordfaith.github.io/uploads/qemuStorageStack.png)
+![](https://swordfaith.github.io/uploads/qemuIOCtrlFlow.png)
