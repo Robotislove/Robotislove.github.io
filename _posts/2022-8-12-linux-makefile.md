@@ -93,6 +93,73 @@ add_executable(main ${FULL_SRCS})
 
 ## CMake的target
 
+Target即目标，与Makefile中的Target概念上一致，有四种target
+- add_executable：增加可执行文件类型的target，会自动执行compiler、linker
+- add_library：增加静态、动态库类型的target，会自动执行compiler、linker
+- add_custom_target：增加自定义的target，只会执行指定的command
+- ExternalProject_Add()：定义一个第三方库，download->patch->build->install一气呵成
+
+每一种target都可以指定依赖项(dependencies)，我们的项目中有某些第三方库的源码，这些库自己已经做好了Makefile，这时候就需要用到`add_custom_target`了。
+`add_custom_target`中可以有多条COMMAND，它们会按顺序执行。
+
+### ExternalProject_Add()，第四种target
+
+我们的软件不可避免地使用第三方库，而时下流行的做法是构建时才下载（更可信），download->patch->build->install。`add_custom_target`配合`add_custom_command`能完成这些步骤，`ExternalProject_Add`提供了一种“一气呵成”的方法，不需要我们写这么多的dependency。
+
+## CMake的Debug、Release编译模式
+
+- 在根CMakeLists.txt里添加定义
+
+- cmake ../ -DCMAKE_BUILD_TYPE=Debug
+
+- make	//编译出ELF文件main
+
+- gdb –tui main	// gdb能看到源码了
+
+如果觉得每次在Debug和Release间做切换都需要CMake很烦，可以做个shell或者python脚本
+
+## CMake构建大型程序的思考
+- 如果使用aux_source_directory的方式自动添加c文件，有可能会将一些无用的文件添加进来
+- 在嵌入式领域中，同一套代码可能要覆盖多种单板，不同单板要使用不同的c文件。CMake自身提供了一种方法来完成裁剪：ccmake
+
+**步骤**
+
+- 修改CMakeLists.txt
+- cmake ../
+- ccmake ../
+
+但是分支融合在CMakeLists.txt代码里，难维护；只有ON/OFF两种状态，不够用；每一种单板的配置不能保存，上百项配置怎么办...
+
+**需求**
+
+组件化构建时，不希望修改构建文件（CMakeLists.txt、makefile）
+
+Linux kernel、Busybox、Uboot、OpenWRT都做到了，他们的Makefile是一字不动的。
+
+**核心思路：**
+
+构建文件是一个解析器，去解析一个数据文件，并根据数据文件的内容来决定哪些组件参与构建。
+
+而这个数据文件由一个有GUI的程序维护，并不需要配置者手工书写。这个GUI程序还根据所设定的依赖关系来动态显示、隐藏组件，防止选错。
+
+### CMake构建大型项目的终极方案：CMake与源代码、单板分支彻底解耦
+
+- 使用Menuconfig的界面生成配置文件
+- CMake不会包含任何c文件，而是解析配置文件，根据配置选择c文件 
+- 每一种单板的配置文件保存在一个独立的文件中，随时可以使用
+
+一种单板的make流程
+- cmake ../
+- cp board_a.cfg .config
+- make
+- make install
+
+可以创建一个shell脚本或者Python脚本来自动完成上述过程。
+
+
+
+
+
 
 
 
