@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Qemu 固件模拟仿真技术-基于arm cortex-m4仿真实践笔记
+title: Qemu 固件模拟仿真技术笔记
 date: 2022-08-12
 author: lau
 tags: [Markdown, Archive]
