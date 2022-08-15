@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Cmake组件化构建大型软件项目松耦合方案笔记
+title: Cmake组件化构建软件项目笔记
 date: 2022-08-12
 author: lau
 tags: [Cmake, Note]
