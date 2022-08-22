@@ -48,6 +48,7 @@ Cmake常见用法。
 - 指定文件存放目录: `set(# 设置变量)` 或者install指令
 ### 项目实战
 main.cpp
+
 ```c++
 #include <iostream>
 
@@ -66,7 +67,9 @@ int main(int, char**) {
     return 0;
 }
 ```
+
 主项目CMakeLists:
+
 ```cmake
 cmake_minimum_required(VERSION 3.0.0)
 project(CMAKE_NEW_TEST VERSION 0.1.0)
@@ -107,7 +110,9 @@ target_link_libraries(${PROJECT_NAME} out_dynamic self_static_lib self_dynamic_d
 endif()
 #]]
 ```
+
 config.in
+
 ```c++
 #ifndef CONFIG_H
 #define CONFIG_H
