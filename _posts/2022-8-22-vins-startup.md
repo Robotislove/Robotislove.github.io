@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Vins论文阅读和实践笔记
+title: Vins论文阅读笔记实践篇
 date: 2022-08-22
 author: lau
 tags: [SLAM, Blog]
