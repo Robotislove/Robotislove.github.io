@@ -67,3 +67,7 @@ VINS Fusion的算法架构如图所示：
 [12] 带有代码流程图：https://www.guyuehome.com/blog/column/id/6 \ https://blog.csdn.net/qq_42700518/category_9544233.html
 
 [13] 简洁的介绍：https://www.sohu.com/a/284064259_715754
+
+[14] https://blog.csdn.net/qq_41839222/article/details/86633487 vins_fusion论文解读
+
+[15] 各个线程的解读：https://blog.csdn.net/moyu123456789/category_8945611.html
