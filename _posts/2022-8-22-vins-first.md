@@ -37,6 +37,27 @@ VINS Fusion的算法架构如图所示：
 
 其中圆形为状态量(如位姿，速度，偏置等)，黄色正方形为局部观测的约束，即来自VO/VIO的相对位姿变换；而其他颜色的正方形为全局观测的约束，比如紫色正方形为来自GPS的约束。
 
+## 参考文献
+[1] https://blog.csdn.net/u011178262/article/details/88769414
 
+[2] https://zhehangt.github.io/2018/04/24/SLAM/VINS/VINSVIO/
+
+[3] https://www.codetd.com/article/4903500
+
+[4] 沈老师PPT：https://slides.games-cn.org/pdf/GAMES201840%E6%B2%88%E5%8A%AD%E5%8A%BC.pdf
+
+//estimate 代码及推导
+
+[5] https://zhuanlan.zhihu.com/p/61733458
+
+[6] https://cggos.github.io/slam/vinsmono_note_cg.html
+
+[7] https://www.zybuluo.com/Xiaobuyi/note/866099
+
+欧拉积分、中点积分与龙格－库塔积分：
+
+[8] http://liuxiao.org/2018/05/%E6%AC%A7%E6%8B%89%E7%A7%AF%E5%88%86%E3%80%81%E4%B8%AD%E7%82%B9%E7%A7%AF%E5%88%86%E4%B8%8E%E9%BE%99%E6%A0%BC%EF%BC%8D%E5%BA%93%E5%A1%94%E7%A7%AF%E5%88%86/
+
+[9] https://scm_mos.gitlab.io/2019/04/23/VINS-FUSION/
 
 
