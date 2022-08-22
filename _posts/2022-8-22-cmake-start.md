@@ -46,5 +46,102 @@ Cmake常见用法。
 - 指定外部lib库: `link_directories()`, `target_link_libraries(${PROJECT_NAME} #文件)`
 - 生成可执行目标文件: `add_executable(${PROJECT_NAME} main.cpp)`
 - 指定文件存放目录: `set(# 设置变量)` 或者install指令
-### 
+### 项目实战
+main.cpp
+```c++
+#include <iostream>
+
+#include "out_include_pow.h"
+#include "self_static_add.h"
+#include "self_static_sub.h"
+#include "self_dynamic_div.h"
+#include "self_dynamic_mul.h"
+
+int main(int, char**) {
+    std::cout << "out: pow(5,2) is " << out_pow(5, 2) << std::endl;
+    std::cout << "self_static: add(5, 2) is " << self_static_add(5, 2) << std::endl;
+    std::cout << "self_static: sub(5, 2) is " << self_static_sub(5, 2) << std::endl;
+    std::cout << "self_dynamic: div(5, 2) is " << self_dynamic_div(5, 2) << std::endl;
+    std::cout << "self_dynamic: mul(5, 2) is " << self_dynamic_mul(5, 2) << std::endl;
+    return 0;
+}
+```
+主项目CMakeLists:
+```cmake
+cmake_minimum_required(VERSION 3.0.0)
+project(CMAKE_NEW_TEST VERSION 0.1.0)
+
+set(CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS}") #编译选项
+
+include_directories(./out_include 
+                    ./self_static/self_static_add/include 
+                    ./self_static/self_static_sub/include
+                    ./self_dynamic/self_dynamic_div/include
+                    ./self_dynamic/self_dynamic_mul/include)
+
+#add_subdirectory(out_src)
+##[[
+add_subdirectory(self_static)
+add_subdirectory(self_dynamic)
+
+link_directories(./out_static ./out_dynamic)
+
+set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin) #在build中执行，相对路径就是相对build。复杂过程使用install
+add_executable(${PROJECT_NAME} main.cpp)
+
+option(USE_MY_STATIC_OUT "option" ON) # 如果变量定义过，则不处理；如果未定义过，则设置默认值
+option(TEST_CMAKE_DEFINE_OFF_EFFECT "comment" OFF)
+set(TEST_VARIABLE_VALUE 0)
+configure_file (
+  "${PROJECT_SOURCE_DIR}/config/config.h.in"
+  "${PROJECT_SOURCE_DIR}/config/config_my89757.h"
+  )
+
+message("!!!!!!!!!!!!:" ${USE_MY_STATIC_OUT} "-----------"${CMAKE_INSTALL_PREFIX})
+if(${USE_MY_STATIC_OUT} STREQUAL "ON")
+target_link_libraries(${PROJECT_NAME} out_static 
+                                      self_static_lib 
+                                      self_dynamic_dll)
+else()
+target_link_libraries(${PROJECT_NAME} out_dynamic self_static_lib self_dynamic_dll)
+endif()
+#]]
+```
+config.in
+```c++
+#ifndef CONFIG_H
+#define CONFIG_H
+
+#cmakedefine USE_MY_STATIC_OUT
+#cmakedefine TEST_CMAKE_DEFINE_OFF_EFFECT
+#define TEST_VARIABLE_NAME ${TEST_VARIABLE_VALUE}
+
+#endif
+```
+
+动态库CMakeLists:
+```cmake
+include_directories(${PROJECT_SOURCE_DIR}/out_include)
+
+aux_source_directory(. SRC_FILES)
+
+MESSAGE("-----------------------------------")
+SET(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/out_dynamic)
+
+add_library(out_dynamic SHARED ${SRC_FILES})
+```
+
+```cmake
+add_subdirectory(self_dynamic_div)
+add_subdirectory(self_dynamic_mul/src)
+
+get_property(SELF_DYNAMIC_DIV GLOBAL PROPERTY "SELF_DYNAMIC_DIV_INNER")
+get_property(SELF_DYNAMIC_MUL GLOBAL PROPERTY "SELF_DYNAMIC_MUL_INNER")
+
+include_directories(${PROJECT_SOURCE_DIR}/self_dynamic/comm)
+
+set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
+add_library(self_dynamic_dll SHARED ${SELF_DYNAMIC_DIV} ${SELF_DYNAMIC_MUL})
+```
+
 
