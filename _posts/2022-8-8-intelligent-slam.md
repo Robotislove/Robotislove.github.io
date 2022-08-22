@@ -66,7 +66,7 @@ SLAM学习入门与相关知识笔记。
 
 [vins_mono论文解读](https://blog.csdn.net/MAX_Hope/article/details/90046770?spm=1001.2101.3001.6650.3&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-3-90046770-blog-86633487.t0_layer_searchtargeting_sa&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-3-90046770-blog-86633487.t0_layer_searchtargeting_sa&utm_relevant_index=4)
 
-
+[移动机器人中的坐标转换](https://zhi-ang.github.io/2019/09/27/coord_trans/)
 ### 经典SLAM算法框架总结
 首先，按照我的理解，我梳理了如下一个思维导图，如果读者发现有什么需要补充或者纠正的欢迎随时交流：
 ![](https://img-blog.csdnimg.cn/d35d5ae2a0d64325abbc1aad38b08ce0.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBASmljaGFvX1Blbmc=,size_20,color_FFFFFF,t_70,g_se,x_16)
