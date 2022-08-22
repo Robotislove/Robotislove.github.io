@@ -60,4 +60,7 @@ VINS Fusion的算法架构如图所示：
 
 [9] https://scm_mos.gitlab.io/2019/04/23/VINS-FUSION/
 
+[10] https://zhi-ang.github.io/categories/SLAM/
+
+[11] GPS/VIO https://zhi-ang.github.io/2019/09/11/vins_fusion/ 
 
