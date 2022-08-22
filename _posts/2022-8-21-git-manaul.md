@@ -192,12 +192,33 @@ git fetch的作用是，从远端服务器中获取某个分支的更新到本�
 
 如果远程指定的分支与本地指定的分支相同，则可直接执行`git fetch origin remote_branch`。
 
+**git merge命令是用于从指定的分支（节点）合并到当前分支的操作**。
 
+git会将指定的分支与当前分支进行比较，找出二者最近的一个共同节点base，之后将指定分支在base之后分离的节点合并到当前分支上。分支合并，实际上是分支间差异提交节点的合并。
+常用的切换分支命令格式：`git merge branch_name`。
 
+git rebase用于合并目标分支内容到当前分支。
+git rebase这条命令用于分支合并，git merge也是用于分支合并。如果你要将其他分支的提交节点合并到当前分支，那么git rebase和git merge都可以达到目的。
 
+常用的合并命令格式：`git rebase branch_name`。
 
+git rebase、git merge背后的实现机制和对合并后节点造成的影响有很大差异，有各自的风险存在，暂不在本课中展开。
 
+#### 撤销操作
 
+git reset通常用于撤销当前工作区中的某些git add/commit操作，可将工作区内容回退到历史提交节点。
+
+常用的工作区回退命令格式：`git reset commit_id`。
+
+**注**：git reset –-mixed/hard/soft的三种参数模式涉及概念较多，不在此区分讲解，请课后按实际需要去了解。
+
+git checkout .用于回退本地所有修改而未提交的文件内容。
+
+git checkout . 这是条有风险的命令，因为它会取消本地工作区的修改(相对于暂存区)，用暂存区的所有文件直接覆盖本地文件，达到回退内容的目的。但它不给用户任何确认机会，所以谨慎使用。
+
+常用的回退命令格式：git checkout .
+
+如果仅仅想回退某个文件的未提交改动，可以使用git checkout –filename来达到目的；如果想将工具区回退（检出）到某个提交版本，可以使用git checkout commit_id。
 
 
 ## 实例：本地分支与远程分支关联、推送内容
