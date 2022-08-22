@@ -44,6 +44,29 @@ SLAM学习入门与相关知识笔记。
 [VIO回顾：从滤波和优化的视角](https://mp.weixin.qq.com/s/zpZERtWPKljWNAiASBLJxA)
 
 [重投影误差](https://www.cnblogs.com/Jessica-jie/p/7242179.html)
+
+[从零到一SLAM](https://www.guyuehome.com/blog/column/id/6)
+
+[vins_mono源码笔记](https://blog.csdn.net/qq_42700518/category_9544233.html)
+
+
+[港科大vins-fusion初探](https://blog.csdn.net/huanghaihui_123/article/details/86518880)
+
+[VINS-Mono论文学习与代码解读——目录与参考](https://blog.csdn.net/qq_41839222/article/details/85793998)
+
+[VINS-FUSION 前端后端代码全详解](https://www.guyuehome.com/34507)
+
+[超级详细的slam各种框架解读](https://zhuanlan.zhihu.com/p/83775731)
+
+[VINS技术路线与代码详解](https://blog.csdn.net/wangshuailpp/article/details/78461171)
+
+[【SLAM】VINS-MONO解析——前端 有各种流程图](https://blog.csdn.net/iwanderu/article/details/104618993)
+
+[cvlibs kitti 视觉slam排名](http://www.cvlibs.net/datasets/kitti/eval_odometry.php)
+
+[vins_mono论文解读](https://blog.csdn.net/MAX_Hope/article/details/90046770?spm=1001.2101.3001.6650.3&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-3-90046770-blog-86633487.t0_layer_searchtargeting_sa&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-3-90046770-blog-86633487.t0_layer_searchtargeting_sa&utm_relevant_index=4)
+
+
 ### 经典SLAM算法框架总结
 首先，按照我的理解，我梳理了如下一个思维导图，如果读者发现有什么需要补充或者纠正的欢迎随时交流：
 ![](https://img-blog.csdnimg.cn/d35d5ae2a0d64325abbc1aad38b08ce0.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBASmljaGFvX1Blbmc=,size_20,color_FFFFFF,t_70,g_se,x_16)
