@@ -64,3 +64,6 @@ VINS Fusion的算法架构如图所示：
 
 [11] GPS/VIO https://zhi-ang.github.io/2019/09/11/vins_fusion/ 
 
+[12] 带有代码流程图：https://www.guyuehome.com/blog/column/id/6 \ https://blog.csdn.net/qq_42700518/category_9544233.html
+
+[13] 简洁的介绍：https://www.sohu.com/a/284064259_715754
