@@ -127,6 +127,77 @@ git diff用于比较项目中任意两个版本（分支）的差异，也可以
 git commit –am “commit message”
 ```
 
+#### 查看日志
+**git log用于查看提交历史。**
+默认加其他参数的话，git log 会按提交时间由近到远列出所有的历史提交日志。每个日志基本包含提交节点、作者信息、提交时间、提交说明等。
+
+常用的日志命令格式：git log
+
+git log配合不同参数具有相当灵活强大的展示功能，常见的如—name-status/-p/--pretty/--graph等等，有兴趣的同学课后自行了解。
+#### 推送至远端仓库
+
+在使用git commit命令将自己的修改从暂存区提交到本地版本库后，可以使用git push将本地版本库的分支推送到远程服务器上对应的分支。成功推动远端仓库后，其他开发人员可以获取到你新提交的内容。常用的推送命令格式： `git push origin branch_name` 。branch_name决定了你的本地分支推送成功后，在远端服务器上的分支名，其他人据此可以获取该分支上的改动内容。
+你的本地分支名可以与推送到远端的分支名不同 ： `git push origin branch_name:new_branch_name`。
+
+#### 分支管理
+
+git branch返回了当前本地工程所有的分支名称，其中master分支前面的“\*”表示——当前工作区所在的分支是master。
+
+如果想查看远端服务器上拥有哪些分支，那么执行`git branch –r`即可，返回的分支名带origin前缀，表示在远端；
+
+如果想查看远端服务器和本地工程所有的分支，那么执行`git branch –a`即可。
+
+`git branch`和`git checkout –b` 的异同：
+
+**相同点：**
+
+`git branch`和`git checkout –b`都可以用于新建分支（默认基于当前分支节点创建）。
+
+**区别点：**
+
+`git branch`新建分支后并不会切换到新分支；
+
+`git checkout –b`新建分支后会自动切换到新分支。
+
+常用的新建分支命令格式：`git branch new_branch_name / git checkout –b branch_name`
+
+`git branch –d`和`git branch –D`都可以用来删除本地分支，后者大写表示强制删除。
+
+有时候当事分支上包含了未合并的改动，或者当事分支是当前所在分支，则-d无法删除，需要使用强制删除来达到目的。
+
+常用的删除分支命令格式：`git branch –d branch_name/git branch –D branch_name`。
+
+删除服务器上的远程分支可以使用`git branch -d -r branch_name`，其中branch_name为本地分支名。
+
+删除后，还要推送到服务器上才行，即`git push origin : branch_name`。
+
+`git checkout` 命令除了创建分支，还用来切换分支，当然比较官方的叫法是“检出”。
+
+有时候，当前分支工作区存在修改而未提交的文件，与目的分支上的内容冲突，会导致checkout切换失败，这时候，可以使用git checkout –f进行强制切换。
+
+常用的切换分支命令格式：`git checkout branch_name`。
+
+`git checkout`对象可以是分支，也可以是某个提交节点或者节点下的某个文件。建议课后自行按需了解。
+
+git pull的作用是，从远端服务器中获取某个分支的更新，再与本地指定的分支进行自动合并。
+
+常用的更新分支命令格式：`git pull origin remote_branch:local_branch`
+
+如果远程指定的分支与本地指定的分支相同，则可直接执行`git pull origin remote_branch`
+
+git fetch的作用是，从远端服务器中获取某个分支的更新到本地仓库。
+
+注意，与git pull不同，git fetch在获取到更新后，并不会进行合并（即下页中的git merge）操作，这样能留给用户一个操作空间，确认git fetch内容符合预期后，再决定是否手动合并节点。
+常用的获取远端分支更新命令格式：`git fetch origin remote_branch:local_branch`
+
+如果远程指定的分支与本地指定的分支相同，则可直接执行`git fetch origin remote_branch`。
+
+
+
+
+
+
+
 
 
 ## 实例：本地分支与远程分支关联、推送内容
