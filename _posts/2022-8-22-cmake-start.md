@@ -131,6 +131,13 @@ SET(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/out_dynamic)
 add_library(out_dynamic SHARED ${SRC_FILES})
 ```
 
+设置全局属性：
+```cmake
+aux_source_directory(${PROJECT_SOURCE_DIR}/self_dynamic/self_dynamic_div/src 
+                    all_src_files)
+set_property(GLOBAL PROPERTY SELF_DYNAMIC_DIV_INNER ${all_src_files})
+```
+
 ```cmake
 add_subdirectory(self_dynamic_div)
 add_subdirectory(self_dynamic_mul/src)
