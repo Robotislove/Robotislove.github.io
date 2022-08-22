@@ -3,7 +3,7 @@ layout: post
 title: git使用总结笔记
 date: 2022-08-21
 author: lau
-tags: [Giy, Blog]
+tags: [Git, Blog]
 comments: true
 toc: true
 pinned: false
@@ -93,9 +93,22 @@ Git仓库下的.git目录默认是不可见的，有一定程度上是出于防�
 
 如果文件已经被git追踪，即曾经提交过的 。在早期版本的git中，需要git add再提交；在较新版本的git中，不需要git add即可提交。
 
+#### 新增/删除/移动文件到暂存区 
 
+git rm 将指定文件彻底从当前分支的缓存区删除，因此它从当前分支的下一个提交快照中被删除。
 
-## 1. 本地分支与远程分支关联、推送内容
+如果一个文件被git rm后进行了提交，那么它将脱离git跟踪，这个文件在之后的节点中不再受git工程的管理。执行git rm后，该文件会在缓存区消失。
+
+你也可以直接从硬盘上删除文件，然后对该文件执行 git commit，git会自动将删除的文件从索引中移除，效果一样。
+
+git mv 命令用于移动文件，也可以用于重命名文件。
+
+例1：需要将文件codehunter_nginx.conf从当前目录移动到config目录下，可执行：
+```shell
+git mv codehunter_nginx.conf config
+```
+
+## 实例：本地分支与远程分支关联、推送内容
 
 创建git仓库可以在远端创建一个仓库，然后check到本地，在本地的文件里创建工程文件，然后提交；也可以将本地现有的工程和远端的空仓库关联，本地创建了一个工程 iOSDemo
 运行没有错误，就可以提交到远端了。
