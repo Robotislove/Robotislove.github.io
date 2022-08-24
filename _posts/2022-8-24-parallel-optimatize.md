@@ -91,4 +91,92 @@ if (condition = true)
   do mutual work //change condition
 ```
 
+### 使用原子操作
+如果对共享数据的操作都是原子的那就不需要锁了。最简单的在x86_64上，如果多个线程同时访问一个对齐的long型是不需要锁的。
+```c++
+volatile unsigned long value_;
+value_ = 18676783867
+```
 
+上面的赋值语句是原子的，所有的线程要么看到旧值，要么看到新值。即使多个线程同时赋值也没关系。
+
+```c++
+value++
+```
+
+但这条自增语句不是原子的，它一般需要读内存、改值、写内存三个指令。
+
+一般的编译器都会针对这种操作，提供内建的原子方法，比如在GCC下，上面的value++可以修改为：
+```c++
+__sync_fetch_and_add(&value_, 1);
+```
+
+就是原子的了，它的实现如下：
+
+```c++
+40057c: 48 8d 45 f8 lea -0x8(%rbp),%rax
+400580: f0 48 83 00 01 lock addq $0x1,(%rax)
+```
+
+直接对内存位置执行add指令，原来的3条变为1条，但这仍然不足以保证它的原子，因为别的线程可以可能正在操作这个内存位置，所以加了一个lock前缀，对于x86来说，lock前缀用于锁定总线，保证其后面指令对内存的独占访问。
+
+gcc提供了一组原子方法，包含了：
+```c++
+type __sync_fetch_and_add (type *ptr, type value)
+type __sync_fetch_and_sub (type *ptr, type value)
+type __sync_fetch_and_or (type *ptr, type value)
+type __sync_fetch_and_and (type *ptr, type value)
+type __sync_fetch_and_xor (type *ptr, type value)
+type __sync_fetch_and_nand (type *ptr, type value)
+bool __sync_bool_compare_and_swap (type *ptr, type oldval type newval)
+```
+
+····更多的原子方法可以参考GCC手册。
+
+无需声明直接使用即可。
+
+这些原子方法的本质是用硬件层面的锁代替了软件层面的锁，从软件层面来看是原子化了。
+
+使用原子操作时，可能会涉及到内存屏障的使用，后面将会介绍内存屏障。
+
+### 免锁
+
+#### CAS
+
+CAS指compare and swap，整个过程是原子的，CAS原语的逻辑是：
+```c++
+bool CAS(Type* addr, const Type& compare, const Type& value)
+{
+  if (*addr == compare)
+  {
+    *addr = value;
+    return true;
+  }
+  return false;
+}
+```
+
+CAS依赖硬件实现，在X86上使用的是cmpxchg指令，cmpxchg支持最多64bit的比较交换操作。上节提到的GCC内建函数__sync_bool_compare_and_swap就是对cmpxchg的封装。
+
+依靠CAS原语，我们可以实现完全无锁的单例模式：
+
+```c++
+static Tp* Instance() {
+  Tp* newTp;
+  if (inst_ == NULL) {
+    newTp = new Tp;
+  if (!__sync_bool_compare_and_swap(&inst_, NULL, newTp)) {
+    delete newTp;
+  }
+  }
+  return inst_;
+}
+```
+
+CAS是很多无锁算法的核心。
+
+#### SPSC
+
+SPSC – single producer single consumer 单生产者单消费者模式，本质是一个FIFO的环形队列，一个读者从队列中取数据，一个写着往队列中添加数据，读和写都不需要加锁。SPSC的实现和维护都不难，是可以用于工程实践的一个免锁算法之一。
+
+## 
