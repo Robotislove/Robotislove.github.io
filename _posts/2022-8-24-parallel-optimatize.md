@@ -179,4 +179,171 @@ CAS是很多无锁算法的核心。
 
 SPSC – single producer single consumer 单生产者单消费者模式，本质是一个FIFO的环形队列，一个读者从队列中取数据，一个写着往队列中添加数据，读和写都不需要加锁。SPSC的实现和维护都不难，是可以用于工程实践的一个免锁算法之一。
 
-## 
+## 具体实现
+
+### 自旋锁
+
+simple::SpinLock完全采用了folly:: MicroSpinLock实现方式，先自旋后休眠。目前仅支持GCC+X86_64。
+
+simple::SpinLock 核心使用CAS原语，改变一个1字节的内容实现加锁。
+```c++
+__sync_bool_compare_and_swap(&lock_, FREE, LOCKED);
+```
+
+解锁时，进行一个内存写操作。由于单字节是必然对齐的，必定是原子的。并插入了优化屏障确保其他线程看到锁FREE以后，拿锁的已经离开了临界区（所有对共享数据的读写已经完成）。目前x86上并不需要硬件屏障。但如果担心特殊环境或未来变化，换成硬件屏障肯定是没问题的。Glibc的和folly以及内核的自旋锁都没有针对x86用硬件屏障。
+
+```c++
+void UnLock() {
+  asm volatile("" : : : "memory");
+  lock_ = FREE;
+}
+```
+### 读写自旋锁
+
+simple::RWSpinLock，完全采用了folly:: RWSpinLock的实现，做了简化并去除了对C++0x atomic原子对象的依赖。使用GCC内建原子操作。
+使用一个int型记录读者和写者状态。
+```c++
+volatile unsigned int lock_ __attribute__ ((aligned (4)));
+```
+读者对lock_原子加2，可以满足2^31个并发读。
+
+写着对lock_ 执行CAS（&lock_, 0, 1）。
+
+### SPSC
+
+simple:: SPSC内部采用一个vector存储环形队列，并且需要预先制定vector大小：
+
+SPSC<string, 1000> spsc; 定义了一个单进单出的环形队列，大小是1000，存储对象是string。
+
+两个游标p_和c_分别记录生产者和消费者的位置，初始都指向0。此时队列为空。
+
+Enqueue入队，如果返回false说明队列满了，由调用者选择处理方式，或休眠或做其他事情。
+
+```c++
+bool Enqueue(const Tp& v) {
+  if (p_ + 1 == c_) return false;
+    queue_[p_.cur_] = v;
+    ++p_;
+    return true;
+  }
+```
+
+入队之后，更新游标p_之前，需要加入内存屏障，确保消费者看到p_更新时，元素已经在队列里面了。
+
+Dequeue出队，如果返回false说明队列为空，由调用者选择处理方式，或休眠或做其他事情。
+
+```c++
+bool Dequeue(Tp& v) {
+  if (c_ == p_) return false;
+    v = queue_[c_.cur_];
+    ++c_;
+    return true;
+  }
+```
+
+入队之后，更新游标c_之前，需要加入内存屏障，确保生产者看到c_更新时，元素不在队列里面了。
+
+由于是环形的p_和c_到vector尾端时需要从头来，通过一个Iter对象将这个过程封装了。
+
+显然游标值必须是内存变量，所以声明为volatile，而且应该保持对齐，确保改写它是原子的。
+
+```c++
+volatile size_t cur_ __attribute__ ((aligned (8)));
+```
+
+对它改写时，先在**临时变量上生成最终新值（包括了到尾端后的调整）**，然后写进内存，写之前加入屏障。这是所有SPSC实现最容易出错的地方。直接对游标修改，中间值会被对方看到。
+
+```c++
+Iter& operator++() {
+  Iter tmp = *this + 1;
+  asm volatile("" : : : "memory");
+  cur_ = tmp.cur_; //atomic
+  return *this;
+}
+```
+
+### Singleton
+演示CAS的使用而已，实际上单例也就第一次创建时存在竞争，使用Double Check之后，是否免锁没有什么区别。
+
+## 附录：内存屏障
+
+考虑如下代码：
+```c++
+线程A:        线程B:
+a=malloc();   if(b==true)
+b=true;          {access a}
+```
+a和b均为内存变量，代码逻辑上并没有问题，但遗憾的是，当b为true时，a不一定已经被赋值为一个合法的内存地址。也就是说对a和b指向的两个内存位置的访问顺序并不是严格按照代码顺序来的。
+
+**有四个层次的顺序**
+
+1. 语句顺序：就是我们C/C++语句的顺序，这是我们要的正确的逻辑顺序。
+2. 指令顺序：编译器生成的指令顺序，这个顺序可能会和语句顺序不一致，编译器出于优化的目的可能会把没有依赖关系的指令打乱。
+3. 执行顺序：CPU执行指令的顺序，这个顺序可能会和指令顺序不一致，CPU出于优化的目的可能会把没有依赖关系的指令打乱。
+4. 感知顺序：CPU感知到的自己或其他CPU对内存操作的顺序。这个顺序可能和执行顺序不一样，Cache机制、内存系统方面的优化可能会导致先对内存的操作却被后生效（感知）。
+
+我们需要的是感知顺序和语句顺序一致。而内存屏障就是做这个事情的。
+
+内存屏障分为两种:
+1. 优化屏障，优化屏障语句提示编译器不要做优化，确保屏障语句前面的所有对内存的操作均在其后面语句对内存的操作之前完成。GCC插入优化屏障的方法是：
+
+```c++
+a=malloc(); if(b==true)
+asm volatile("" : : : "memory");
+b=true;
+```
+
+`asm volatile("" : : : "memory");` 是一条内联汇编语句，起到屏障的作用。
+
+优化屏障确保指令顺序和语句顺序的一致。
+
+2. 硬件屏障， 硬件屏障是具体平台架构提供的特殊指令，硬件屏障通常分为读屏障、写屏障、读写屏障。 顾名思义，读屏障确保读顺序、写屏障确保写顺序、读写屏障确保读写顺序。
+
+X86提供的三个屏障指令。
+
+- LFENCE instructions cannot pass earlier reads.
+- SFENCE instructions cannot pass earlier writes.
+- MFENCE instructions cannot pass earlier reads or writes.
+使用X86硬件屏障也很简单。
+
+```c++
+asm volatile("mfence " : : : "memory");
+```
+
+也可以借鉴内核代码，把这些内联汇编定义成可读性好的宏。
+
+```c++
+#define mb() asm volatile("mfence":::"memory")
+#define rmb() asm volatile("lfence":::"memory")
+#define wmb() asm volatile("sfence" ::: "memory")
+```
+
+硬件屏障确保感知顺序和指令顺序一致。但硬件屏障对应的汇编语句，也包括了优化屏障，所以硬件屏障语句可以确保感知顺序和语句顺序一致。
+
+回到我们上面一开始提到的例子，实际上在已有的x86架构上只要插入了优化屏障就可以了，
+
+```c++
+线程A:                                   线程B:
+a=malloc();                             if(b==true)
+asm volatile("sfence " : : : "memory");
+b=true;                                 {access a}
+```
+只要编译器不乱序，对于一般的写操作x86是不会做乱序处理的。
+
+Writes to memory are not reordered with other writes, with the following
+exceptions:
+
+— writes executed with the CLFLUSH instruction;
+
+— streaming stores (writes) executed with the non-temporal move instructions
+(MOVNTI, MOVNTQ, MOVNTDQ, MOVNTPS, and MOVNTPD); and
+
+— string operations (see Section 8.2.4.1).
+
+但是INTEL在他的手册里面也说了，内存顺序的机制随着x86的架构演进可能会变化。总之要是实在摸不准，我们直接使用硬件屏障语句就好了。
+
+**如果你使用mutex spinlock这样的锁机制，你不需要担心内存屏障，这些锁的底层实现隐含了内存屏障的处理。**
+
+**如果在X86上使用__sync_fetch_and_add这一组原子方法，是不需要屏障的，因为lock前缀隐含了内存屏障的处理。**
+
+
