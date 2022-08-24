@@ -136,8 +136,13 @@ private:
 ## 参考文献
 
 [1] [Lock-Free Single-Producer - Single Consumer Circular Queue](https://www.codeproject.com/script/Articles/ListVersions.aspx?aid=43510#Main)
+
 [2] Memory Ordering in Modern Microprocessors Paul E. McKenney http://www.linuxjournal.com/article/8211
+
 [3] Facebook folly source code https://github.com/facebook/folly/
+
 [4] Intel 64 and IA-32 Architectures Software Developer's Manual http://www.intel.com/content/www/us/en/processors/architectures-software-developer-manuals.html
+
 [5] GCC online doc http://gcc.gnu.org/onlinedocs/gcc-4.1.1/gcc/Atomic-Builtins.html
+
 [6] Linux Source Code http://www.kernel.org/
