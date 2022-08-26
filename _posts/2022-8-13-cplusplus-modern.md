@@ -265,3 +265,5 @@ https://docs.python.org/3/library/asyncio.html
 
 ## 参考文献
 [1] [一个汇总CPP各种资源的网站](https://compile-time.re/)
+
+[2] https://netcan.github.io/archives/
