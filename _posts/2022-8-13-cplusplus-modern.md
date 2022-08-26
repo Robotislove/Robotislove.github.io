@@ -14,7 +14,8 @@ pinned: false
 <!-- more -->
 
 ## 入门
-
+C++技能树汇总，参考罗能大神：
+![](http://assets.processon.com/chart_image/6308b44a07912906e3a5edc5.png)
 ### 侯捷C++系列教程
 
 - [C++ 面向对象高级开发](https://www.youtube.com/watch?v=GIvZmTfvkJw&list=PLRTJhCIMo8HOIpVXaaI_yqihTuSTPUcCy)
