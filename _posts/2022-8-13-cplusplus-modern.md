@@ -130,5 +130,138 @@ https://space.bilibili.com/296494084
 
 [10] 还有很多优秀的程序员，不再一一枚举，待续
 
+## C++ 20标准
+### 类型与对象
+
+https://devblogs.microsoft.com/cppblog/how-to-use-class-template-argument-deduction/
+
+https://herbsutter.com/elements-of-modern-c-style/
+
+https://modern-cpp.readthedocs.io/zh_CN/latest/index.html
+
+https://github.com/elbeno/using-types-effectively/blob/master/presentation.org
+
+### 编译时多态
+
+https://preshing.com/20210315/how-cpp-resolves-a-function-call/
+
+https://accu.org/journals/overload/9/43/frogley_442/
+
+https://www.internalpointers.com/post/quick-primer-type-traits-modern-cpp
+
+http://www.eniscuola.net/en/2016/06/27/the-numbers-of-nature-the-fibonacci-sequence/
+
+https://clang.llvm.org/docs/LanguageExtensions.html#type-trait-primitives
+
+《从数学到泛型编程》
+
+https://eli.thegreenplace.net/2014/sfinae-and-enable_if/
+
+https://www.jianshu.com/p/38f17600f19a
+
+https://zh.wikipedia.org/wiki/访问者模式
+
+https://en.wikipedia.org/wiki/Barton–Nackman_trick
+
+https://ledas.com/post/857-how-to-hack-c-with-templates-and-fri
+
+https://gieseanw.wordpress.com/2019/10/20/we-dont-need-no-stinking-expression-templates/
+
+### 概念约束
+
+C++ Concepts - complete overview
+
+The C++0x Concept Effort
+
+Fundamentals of Generic Programming
+
+The Design and Evolution of C++
+
+Concept checking
+
+Concepts – Design choices for template argument checking
+
+Concepts for C++0x
+
+A concept design (Rev. 1)
+
+Concepts Lite: Constraining Templates with Predicates
+
+Concepts: The Future of Generic Programming
+
+https://akrzemi1.wordpress.com/2020/01/29/requires-expression/
+
+https://akrzemi1.wordpress.com/2020/03/26/requires-clause/
+
+https://akrzemi1.wordpress.com/2020/05/07/ordering-by-constraints/
+
+https://stackoverflow.com/questions/62644070/differences-between-stdis-convertible-and-stdconvertible-to-in-practice
+
+### 元编程介绍
+
+#### 模板元编程
+
+https://ieeexplore.ieee.org/iel5/32/35910/01702623.pdf
+
+#### constexpr元编程
+
+https://www.cppstories.com/2021/constexpr-vecstr-cpp20/
+
+https://www.cppstories.com/2021/constexpr-new-cpp20/#limitations
+
+Don’t constexpr All The Things
+
+https://gist.github.com/Som1Lse/5309b114accc086d24b842fd803ba9d2
+
+https://zh.wikipedia.org/wiki/考拉兹猜想
+
+### ranges标准库
+
+https://ericniebler.com/2018/12/05/standard-ranges/
+https://www.nextptr.com/tutorial/ta1208652092/how-cplusplus-rangebased-for-loop-works
+https://quuxplusone.github.io/blog/2020/07/11/the-std-swap-two-step/
+http://mmore500.com/cse-491/blog/2020/04/20/ranges-transpose.html
+https://zh.wikipedia.org/wiki/矩陣乘法
+http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2021/p2387r0.html
+https://github.com/ericniebler/range-v3
+
+### 无栈协程
+
+#### C++ HOPL
+
+The history, present and future of computer language coroutines
+
+https://en.wikipedia.org/wiki/Coroutine#C++
+
+https://www.itproportal.com/features/the-rise-of-the-coroutines/
+
+https://www.youtube.com/watch?v=\_fu0gx-xseY
+
+https://blog.panicsoftware.com/coroutines-introduction/
+
+https://github.com/lewissbaker/lewissbaker.github.io/blob/master/\_posts/2017-09-25-coroutine-theory.md
+
+https://hacksoflife.blogspot.com/2021/06/c-coroutines-getting-past-names.html
+
+Coroutine changes for C++20 and beyond
+
+### 模块
+
+C++ HOPL
+
+https://docs.microsoft.com/en-us/cpp/cpp/modules-cpp?view=msvc-170
+
+Practical C++ Modules
+
+https://vector-of-bool.github.io/2019/03/10/modules-1.html
+
+C++20 modules with GCC11
+
+https://docs.microsoft.com/en-us/cpp/cpp/tutorial-named-modules-cpp?view=msvc-170#create-the-primary-module-interface-unit
+
+### 综合运用
+
+https://docs.python.org/3/library/asyncio.html
+
 ## 参考文献
 [1] [一个汇总CPP各种资源的网站](https://compile-time.re/)
