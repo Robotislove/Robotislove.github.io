@@ -115,6 +115,12 @@ https://www.youtube.com/c/lefticus1
 一个做开源编译器工作的组织（还是企业？），分享非常多编译器相关的东西。2022年7月开始更新《徒手写一个RISC-V编译器》系列视频，讲的挺好的，把观众当成完全不懂编译原理的小 baby 来教。
 
 https://space.bilibili.com/296494084
+
+### C/Go的一点福利
+平时我们开发C++时难免会遇到跟C和Go的对接，这里给两个学习网址。
+
+1. [Linux C编程一站式学习](http://akaedu.github.io/book/index.html)
+2. [Go语言指南](https://tour.go-zh.org/flowcontrol/6)
 ## 作者
 [1] Jeff Preshing，加拿大程序员，主要涉及一些并发编程、语言特性相关话题
 
