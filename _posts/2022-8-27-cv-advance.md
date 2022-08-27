@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 计算机视觉-基础知识篇学习笔记
+title: 计算机视觉-进阶知识篇学习笔记
 date: 2022-08-27
 author: lau
 tags: [CV, Blog]
