@@ -94,6 +94,11 @@ https://www.youtube.com/watch?v=o7h_sYMk_oc&list=PLUl4u3cNGP63VIBQVWguXxZZi0566y
 
 https://www.youtube.com/user/CppCon
 
+### Meetingcpp
+C++ 相关大会
+
+https://meetingcpp.com/2021/
+
 ### CppNow
 
 著名 IDE 厂商 JetBrains 发起的 C++ 社区讨论组织。这个视频账号会发布他们的演讲视频。
