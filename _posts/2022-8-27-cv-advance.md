@@ -14,3 +14,10 @@ pinned: false
 
 <!-- more -->
 ![](http://assets.processon.com/chart_image/630a0c505653bb0715e3c90e.png)
+
+三维重建软件：
+
+- ploycam
+- 3d scanner 
+- magic plan
+
