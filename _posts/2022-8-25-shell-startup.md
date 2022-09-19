@@ -5,7 +5,7 @@ date: 2022-08-25
 author: lau
 tags: [Shell, Blog]
 comments: true
-toc: true
+toc: false
 pinned: false
 ---
 Shell在执行批量任务时编写脚本效率很高，这里记录学习笔记。
@@ -69,7 +69,7 @@ source或者.命令是Shell的内建命令，这种方式也不会创建子Shell
 
 ### 单引号
 和C语言不一样，Shell脚本中的单引号和双引号一样都是字符串的界定符（双引号下一节介绍），而不是字符的界定符。单引号用于保持引号内所有字符的字面值，即使引号内的\和回车也不例外，但是字符串中不能出现单引号。如果引号没有配对就输入回车，Shell会给出续行提示符，要求用户把引号配上对。
- 
+
 ### 双引号
 被双引号用括住的内容，将被视为单一字串。它防止通配符扩展，但允许变量扩展。这点与单引号的处理方式不同。
 
@@ -117,9 +117,9 @@ case命令可类比C语言的switch/case语句，esac表示case语句块的结�
     for FRUIT in apple banana pear; do
       echo "I like $FRUIT"
     done
-```
+ ```
  FRUIT是一个循环变量，第一次循环$FRUIT的取值是apple，第二次取值是banana，第三次取值是pear。
- 
+
 ### while/do/done
 while的用法和C语言类似。比如一个验证密码的脚本：
 ```shell
@@ -141,7 +141,7 @@ break[n]可以指定跳出几层循环，continue跳过本次循环步，没跳�
 break跳出，continue跳过。
 ### 位置参数和特殊变量
 有很多特殊变量是被Shell自动赋值的，我们已经遇到了$?和$1，现在总结一下：
- 
+
 常用的位置参数和特殊变量：
 ```
 $0 相当于C语言main函数的argv[0]

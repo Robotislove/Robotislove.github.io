@@ -5,7 +5,7 @@ date: 2022-05-23
 author: lau
 tags: [SLAM, Archive]
 comments: true
-toc: true
+toc: false
 pinned: false
 ---
 同时定位与地图构建（Simultaneous Localization and Mapping, SLAM）现状与挑战。

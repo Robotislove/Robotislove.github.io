@@ -5,7 +5,7 @@ date: 2022-3-19
 author: Lau
 tags: [ML]
 comments: true
-toc: true
+toc: false
 pinned: false
 ---
 

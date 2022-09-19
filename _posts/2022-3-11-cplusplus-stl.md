@@ -5,7 +5,7 @@ date: 2022-03-11
 author: zxl19
 tags: [STL, C++]
 comments: true
-toc: true
+toc: false
 pinned: false
 ---
 

@@ -5,7 +5,7 @@ date: 2022-08-11
 author: lau
 tags: [Linux, Note]
 comments: true
-toc: true
+toc: false
 pinned: false
 ---
 

@@ -5,7 +5,7 @@ date: 2022-08-12
 author: lau
 tags: [Markdown, Archive]
 comments: true
-toc: true
+toc: false
 pinned: false
 ---
 

@@ -5,7 +5,7 @@ date: 2022-08-10
 author: lau
 tags: [Leetcode,Archive]
 comments: true
-toc: true
+toc: false
 pinned: false
 ---
 LeetCode刷题回溯算法相关知识笔记。

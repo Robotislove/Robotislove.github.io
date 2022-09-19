@@ -5,7 +5,7 @@ date: 2022-08-22
 author: lau
 tags: [Cmake, Blog]
 comments: true
-toc: true
+toc: false
 pinned: false
 ---
 
@@ -155,5 +155,4 @@ include_directories(${PROJECT_SOURCE_DIR}/self_dynamic/comm)
 set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 add_library(self_dynamic_dll SHARED ${SELF_DYNAMIC_DIV} ${SELF_DYNAMIC_MUL})
 ```
-
 

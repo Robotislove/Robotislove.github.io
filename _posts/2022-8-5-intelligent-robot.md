@@ -5,7 +5,7 @@ date: 2022-08-5
 author: lau
 tags: [SLAM,Archive]
 comments: true
-toc: true
+toc: false
 pinned: false
 ---
 智能服务机器人3D-SLAM优化。
@@ -427,5 +427,4 @@ hdl_graph_slam的运行效果不错。但在在一些较大的场景中，有时
 整体来说，hdl_graph_slam系统的代码模块化做的较好，思路清晰，对多信息源的融合也做的很好，即使再多增加几个传感器也易扩展实现。
 
 参考: https://github.com/koide3/hdl_graph_slam
-
 

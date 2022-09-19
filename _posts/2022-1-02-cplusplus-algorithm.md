@@ -5,7 +5,7 @@ date: 2022-01-02
 author: lau
 tags: [C++, Archive]
 comments: true
-toc: true
+toc: false
 pinned: false
 ---
 

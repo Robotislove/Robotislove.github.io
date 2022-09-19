@@ -5,7 +5,7 @@ date: 2022-06-16
 author: lau
 tags: [动态SLAM, Archive]
 comments: true
-toc: true
+toc: false
 pinned: false
 ---
 动态环境SLAM是目前slam方向的一个热门研究领域。
@@ -27,17 +27,17 @@ pinned: false
 
 - 1.DynaSLAM（IROS 2018）
   - 论文：DynaSLAM: Tracking, Mapping and Inpainting in Dynamic Scenes
-代码：https://github.com/BertaBescos/DynaSLAM
-主要思想：（语义+几何）
-1.使用Mask-CNN进行语义分割；
-2.在low-cost Tracking阶段将动态区域（人）剔除，得到初始位姿；
-3.多视图几何方法判断外点，通过区域增长法生成动态区域；
-4.代码中将多视图几何的动态区域与语义分割人的区域全都去除，将mask传给orbslam进行跟踪；
-5.背景修复，包括RGB图和深度图。
-**创新点：** 语义分割无法识别移动的椅子，需要多视图几何的方法进行补充
-**讨论：** DynaSLAM与下面的DS-SLAM是经典的动态slam系统，代码实现都很简洁。Dyna-SLAM的缺点在于：1.多视图几何方法得到的外点，在深度图上通过区域增长得到动态区域，只要物体上存在一个动态点，整个物体都会被“增长”成为动态 2.其将人的区域以及多视图几何方法得到的区域都直接去掉，与论文不符。
-![](https://img-blog.csdnimg.cn/20210530120315904.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
-![](https://img-blog.csdnimg.cn/20210530120328187.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FpbnFpbnhpYW5zaGVuZw==,size_16,color_FFFFFF,t_70)
+  代码：https://github.com/BertaBescos/DynaSLAM
+  主要思想：（语义+几何）
+  1.使用Mask-CNN进行语义分割；
+  2.在low-cost Tracking阶段将动态区域（人）剔除，得到初始位姿；
+  3.多视图几何方法判断外点，通过区域增长法生成动态区域；
+  4.代码中将多视图几何的动态区域与语义分割人的区域全都去除，将mask传给orbslam进行跟踪；
+  5.背景修复，包括RGB图和深度图。
+  **创新点：** 语义分割无法识别移动的椅子，需要多视图几何的方法进行补充
+  **讨论：** DynaSLAM与下面的DS-SLAM是经典的动态slam系统，代码实现都很简洁。Dyna-SLAM的缺点在于：1.多视图几何方法得到的外点，在深度图上通过区域增长得到动态区域，只要物体上存在一个动态点，整个物体都会被“增长”成为动态 2.其将人的区域以及多视图几何方法得到的区域都直接去掉，与论文不符。
+  ![](https://img-blog.csdnimg.cn/20210530120315904.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+  ![](https://img-blog.csdnimg.cn/20210530120328187.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FpbnFpbnhpYW5zaGVuZw==,size_16,color_FFFFFF,t_70)
 
 - 2.DS-SLAM（IROS 2018， 清华大学）
   - 论文：DS-SLAM: A Semantic Visual SLAM towards Dynamic Environments

@@ -5,7 +5,7 @@ date: 2022-09-04
 author: lau
 tags: [Leetcode, Blog]
 comments: true
-toc: true
+toc: false
 pinned: false
 
 

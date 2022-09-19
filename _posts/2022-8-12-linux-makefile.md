@@ -5,7 +5,7 @@ date: 2022-08-12
 author: lau
 tags: [Cmake, Note]
 comments: true
-toc: true
+toc: false
 pinned: false
 ---
 
@@ -155,7 +155,6 @@ Linux kernel、Busybox、Uboot、OpenWRT都做到了，他们的Makefile是一�
 - make install
 
 可以创建一个shell脚本或者Python脚本来自动完成上述过程。
-
 
 
 

@@ -5,7 +5,7 @@ date: 2022-08-9
 author: lau
 tags: [Performance,Archive]
 comments: true
-toc: true
+toc: false
 pinned: false
 ---
 计算机系统性能优化相关知识笔记。

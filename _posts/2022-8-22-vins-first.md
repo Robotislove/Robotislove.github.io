@@ -5,7 +5,7 @@ date: 2022-08-22
 author: lau
 tags: [SLAM, Blog]
 comments: true
-toc: true
+toc: false
 pinned: false
 ---
 Vins作为经典的VIO系统，这里记录它的原理和实践。

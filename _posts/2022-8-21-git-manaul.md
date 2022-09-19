@@ -5,7 +5,7 @@ date: 2022-08-21
 author: lau
 tags: [Git, Blog]
 comments: true
-toc: true
+toc: false
 pinned: false
 ---
 
@@ -272,7 +272,7 @@ git checkout -b dev
 3. HelloWord工程结构的添加 命令
  ```shell
  git add -A 
-```
+ ```
 4. 提交git到版本 -m是提交的注释
 ```shell
 git commit -m "注释"
@@ -293,7 +293,7 @@ git pull
 git push <远程主机名> <本地分支名>:<远程分支名>
  
 git push origin master:master
-```
+ ```
 
 **小提示**
 

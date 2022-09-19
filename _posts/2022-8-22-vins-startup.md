@@ -5,7 +5,7 @@ date: 2022-08-22
 author: lau
 tags: [SLAM, Blog]
 comments: true
-toc: true
+toc: false
 pinned: false
 ---
 Vins作为经典的VIO系统，这里记录它的原理和实践。
@@ -43,18 +43,18 @@ VINS在正常工作时一般存在三个节点：“/fature_tracker”、“/vin
 参数调用：<param name=“foo” value="$(arg arg-name)"/>
 
 -------------------------------------------------------------------------------------------------------------
-	
+
 euroc.launch文件的内容很少：
-  
+
 1、设置局部变量"config_path"，表示euroc_config.yaml的具体地址；
-  
+
 ```shell
 <arg name="config_path" default = "$(find feature_tracker)/../config/euroc/euroc_config.yaml" />
 	  <arg name="vins_path" default = "$(find feature_tracker)/../config/../" />
 ```
-  
+
 设置局部变量"vins_path"，在parameters.cpp中使用鱼眼相机mask中用到：
-  
+
 ```shell
   
 std::string VINS_FOLDER_PATH = readParam<std::string>(n, "vins_folder");
@@ -90,7 +90,7 @@ if (FISHEYE == 1)
         <param name="skip_dis" type="double" value="0" />
     </node>
 ```
-	
+
 visualization_shift_x和visualization_shift_y表示在进行位姿图优化后，对得到的位姿在x坐标和y坐标的偏移量（一般都设为0）；
 ```shell
 geometry_msgs::PoseStamped pose_stamped;
@@ -129,7 +129,7 @@ void readParameters(ros::NodeHandle &n)
 下面将具体介绍euroc_config.yaml每个参数的具体意义。
 
 ##### 1、通用参数
-	
+
 1）接收IMU和图像的topic，其中image_topic在节点/fature_tracker中被订阅，以进行角点的光流跟踪；imu_topic在节点/vins_estimator中被订阅，以进行IMU预积分。
 
 2）output_path为输出文件的地址，输出以下内容：VINS的运行轨迹"/vins_result_no_loop.csv"与"/vins_result_loop.csv"，相机与IMU的外参估计 “/extrinsic_parameter.csv”（如果estimate_extrinsic不为0即需要对外参进行估计的话）。注意如果该文件夹不存在则不输出。
@@ -163,7 +163,7 @@ projection_parameters:
    cx: 3.630e+02
    cy: 2.481e+02
 ```
-	
+
 ##### 3、imu和相机之间的外参
 这里需要注意的是其旋转矩阵ric、平移向量tic都是表示从camera坐标系到IMU坐标系的变换。
 
@@ -216,7 +216,7 @@ if (n_max_cnt > 0)
             cv::goodFeaturesToTrack(forw_img, n_pts, MAX_CNT - forw_pts.size(), 0.01, MIN_DIST, mask);
         }
 ```
-	
+
 2）min_dist为两个相邻特征之间像素的最小间隔，目的是保证图像中均匀的特征分布。在FeatureTracker::setMask()中应用，该函数的作用是对跟踪点进行排序并去除密集点。
 min_dist的实现原理是在mask中将当前特征点周围半径为MIN_DIST的区域设置为0，后面便不再选取该区域内的点。
 
@@ -240,13 +240,13 @@ if (round(1.0 * pub_count / (img_msg->header.stamp.toSec() - first_image_time)) 
     else
         PUB_THIS_FRAME = false;
 ```
-	
+
 4）F_threshold为ransac算法的门限值，在FeatureTracker::rejectWithF()通过计算基本矩阵去除图像特征跟踪的外点时使用，一般不修改。
 
 ```c++
 cv::findFundamentalMat(un_cur_pts, un_forw_pts, cv::FM_RANSAC, F_THRESHOLD, 0.99, status);
 ```
-	
+
 5）show_track：将经过特征跟踪的图像进行发布，需要。
 
 6）equalize: 如果图像整体太暗或者太亮则需要进行直方图均衡化，在FeatureTracker::readImage()中进行自适应直方图均衡化，需要。
@@ -273,7 +273,7 @@ max_solver_time: 0.04  # max solver itration time (ms), to guarantee real time
 max_num_iterations: 8   # max solver itrations, to guarantee real time
 keyframe_parallax: 10.0 # keyframe selection threshold (pixel)
 ```
-	
+
 max_solver_time和max_num_iterations分别定义了ceres优化器的最大迭代时间和最大迭代次数，以保证实时性。在Estimator::optimization()中使用，并根据不同的边缘化方案而有改变。
 
 ```c++
@@ -285,7 +285,7 @@ if (marginalization_flag == MARGIN_OLD)
 else
 	options.max_solver_time_in_seconds = SOLVER_TIME;
 ```
-	
+
 keyframe_parallax定义了关键帧的选择阈值。在FeatureManager::addFeatureCheckParallax()中通过计算每一个点跟踪次数和它在次新帧和次次新帧间的视差确定是否是关键帧。这个参数影响着算法中关键帧的个数。
 	
 其中keyframe_parallax为像素坐标系，MIN_PARALLAX为归一化相机坐标系。
@@ -367,7 +367,7 @@ save_image: 1                   # 保存在位姿图中的图像，为0则关闭
 visualize_imu_forward: 0        # 输出IMU前向递推的角度预测值，一般用于低延迟和高频率的应用要求下
 visualize_camera_size: 0.4      # 在RVIZ显示中相机模型的大小
 ```
-	
+
 其中visualize_imu_forward在pose_graph_node中的imu_forward_callback()即imu前向递推的回调函数中用到，如果为1则接收IMU前向递推的角度预测值，经回环的偏移矫正并转换为世界坐标系下的相机姿态，发布；为0则什么都不做，不发布。
 
 #### 总结
@@ -382,7 +382,6 @@ visualize_camera_size: 0.4      # 在RVIZ显示中相机模型的大小
 4、相机是卷帘曝光还是全局曝光。
 	
 之后根据应用场景的要求，确定是否需要进行回环检测、快速重定位或是读取之前位姿图等功能，以及用于RVIZ可视化的参数。根据在实际场景运行后的情况再对/feature_traker和/vins_estimator中的参数进行调整，以获得较好的结果。当然这只是在实验阶段，要使其能真正落地应用，还需要进行不断的测试和优化。
-
 
 
 

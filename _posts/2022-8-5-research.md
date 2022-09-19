@@ -5,7 +5,7 @@ date: 2022-08-5
 author: lau
 tags: [Archive]
 comments: true
-toc: true
+toc: false
 pinned: false
 ---
 找到了一份实操性很强的读文献方法。

@@ -5,7 +5,7 @@ date: 2022-08-24
 author: lau
 tags: [C++, Blog]
 comments: true
-toc: true
+toc: false
 pinned: false
 ---
 并行编程锁优化，这里记录它的原理和实践。

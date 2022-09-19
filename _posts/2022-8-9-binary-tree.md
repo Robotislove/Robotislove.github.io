@@ -5,7 +5,7 @@ date: 2022-08-9
 author: lau
 tags: [Leetcode,Archive]
 comments: true
-toc: true
+toc: false
 pinned: false
 ---
 leetcode刷题二叉树知识笔记。

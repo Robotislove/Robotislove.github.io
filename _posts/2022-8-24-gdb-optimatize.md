@@ -5,7 +5,7 @@ date: 2022-08-24
 author: lau
 tags: [C++, Blog]
 comments: true
-toc: true
+toc: false
 pinned: false
 ---
 GDB作为经典的调试系统，这里记录它的原理和实践。
@@ -146,7 +146,6 @@ thread n  切换thread id为 n 的线程为当前线程
 ```shell
 break printf thread 3
 ```
-
 
 
 
