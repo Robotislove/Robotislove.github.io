@@ -249,6 +249,40 @@ public:
 };
 ```
 
+```c++
+class Solution {
+    vector<int> vis;
+
+public:
+    void backtrack(vector<int>& nums, vector<vector<int>>& ans, int idx, vector<int>& perm) {
+        if (idx == nums.size()) {
+            ans.emplace_back(perm);
+            return;
+        }
+        for (int i = 0; i < (int)nums.size(); ++i) {
+            if (vis[i] || (i > 0 && nums[i] == nums[i - 1] && !vis[i - 1])) {
+                continue;
+            }
+            perm.emplace_back(nums[i]);
+            vis[i] = 1;
+            backtrack(nums, ans, idx + 1, perm);
+            vis[i] = 0;
+            perm.pop_back();
+        }
+    }
+
+    vector<vector<int>> permuteUnique(vector<int>& nums) {
+        vector<vector<int>> ans;
+        vector<int> perm;
+        vis.resize(nums.size());
+        sort(nums.begin(), nums.end());
+        backtrack(nums, ans, 0, perm);
+        return ans;
+    }
+};
+
+```
+
 
 
 > No 17. 电话号码的字母组合(中等）
@@ -537,6 +571,119 @@ public:
         vector<string> res_temp(n, string(n, '.'));
         backTracking(n, 0, res_temp);
         return res;
+    }
+};
+```
+
+> No 37. 解数独(困难）
+> 来源：力扣（LeetCode）
+> 链接：https://leetcode-cn.com/problems/sudoku-solver/
+>
+> 题目描述：
+>
+> 编写一个程序，通过填充空格来解决数独问题。数独的解法需 遵循如下规则：
+>
+> 数字 1-9 在每一行只能出现一次。
+> 数字 1-9 在每一列只能出现一次。
+> 数字 1-9 在每一个以粗实线分隔的 3x3 宫内只能出现一次。（请参考示例图）
+> 数独部分空格内已填入了数字，空白格用 '.' 表示。
+
+![](https://img-blog.csdnimg.cn/img_convert/f4fb9f4132522494a6f2eaed52290a01.png)
+
+```c++
+示例 1：
+输入：board = [
+["5","3",".",".","7",".",".",".","."],
+["6",".",".","1","9","5",".",".","."],
+[".","9","8",".",".",".",".","6","."],
+["8",".",".",".","6",".",".",".","3"],
+["4",".",".","8",".","3",".",".","1"],
+["7",".",".",".","2",".",".",".","6"],
+[".","6",".",".",".",".","2","8","."],
+[".",".",".","4","1","9",".",".","5"],
+[".",".",".",".","8",".",".","7","9"]]
+ 
+输出：[
+["5","3","4","6","7","8","9","1","2"],
+["6","7","2","1","9","5","3","4","8"],
+["1","9","8","3","4","2","5","6","7"],
+["8","5","9","7","6","1","4","2","3"],
+["4","2","6","8","5","3","7","9","1"],
+["7","1","3","9","2","4","8","5","6"],
+["9","6","1","5","3","7","2","8","4"],
+["2","8","7","4","1","9","6","3","5"],
+["3","4","5","2","8","6","1","7","9"]]
+ 
+解释：输入的数独如上图所示，唯一有效的解决方案如下所示：
+```
+
+![](https://img-blog.csdnimg.cn/img_convert/a7eb44484738d96ca1893d1c9a888977.png)
+
+**思路：**看到这个题，回想起了之前上中学被数独游戏支配的恐惧，要是中学的时候会这个那多好，哈哈。这个题其实本质上还是换汤不换药，只不过递归时要进行的条件判断复杂了一些。
+
+合法判断：同行、同列不能有重复数字，当前这个3*3 的格子内不能有重复数字。确定每一个小格子的起始位置想了挺久，后来发现是自己想复杂了，直接用 当前行 除以 3然后在 * 3，那就是起始位置，其实是利用了 整形除法的取整特性。本质上还是映射，就是把这个格子内的行列数都映射在这个格子的起始位置。
+
+整体思路：利用两个 for 循环，遍历每一个位置，如果这个位置是数字，那就跳过，直接遍历下一个数字，如果是空格，那就对这个位置以及要放的数字进行合法判断，如果合法那就添加一个数字，如果不合法那就换一个数字再判断。如果这9个数字都用完了还不合法，那就无解。
+
+这里的递归函数也有返回值，因为如果找到了合法的数独解，后面的就不用再遍历了。
+```c++
+class Solution {
+public:
+    // 需要返回值但不需要终止条件
+    //返回值的作用是解数独找到一个符合的条件立刻就返回，相当于找从根节点到叶子节点一条唯一路径
+    //不需要终止条件是因为要遍历整个棋盘
+    bool backTracking(vector<vector<char>>& board){
+        for(int i = 0; i < board.size(); i++){
+            for(int j = 0; j < board[i].size(); j++){
+                //这个位置上有数字
+                if(board[i][j] != '.'){
+                    continue;
+                }
+                for(char c = '1'; c <= '9'; c++){
+                    if(judgeValid(i, j, c, board) == true){
+                        //设置数字
+                        board[i][j] = c;
+                        if(backTracking(board) == true){
+                            return true;
+                        }
+                        //回溯撤销
+                        board[i][j] = '.';
+                    }
+                }
+                //这9个数字都试完了都不行
+                return false;
+            }
+        }
+        return true;
+    }
+ 
+    bool judgeValid(int row, int col, char val, vector<vector<char>>& board){
+        //同行
+        for(int i = 0; i < 9; i++) {
+            if(board[row][i] == val){
+                return  false;
+            }
+        }
+        //同列
+        for(int j = 0; j < 9; j++) {
+            if(board[j][col] == val){
+                return  false;
+            }
+        }
+        //3*3网格内是否重复
+        int startRow = (row / 3) * 3;
+        int startCol = (col / 3) * 3;
+        for(int i = startRow; i < startRow + 3; i++){
+            for(int j = startCol; j < startCol + 3; j++){
+                if(board[i][j] == val){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    void solveSudoku(vector<vector<char>>& board) {
+        backTracking(board);
     }
 };
 ```
