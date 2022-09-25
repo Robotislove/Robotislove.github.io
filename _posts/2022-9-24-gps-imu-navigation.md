@@ -1,7 +1,7 @@
 ---
 layout: post
 title: IMU+GPS融合使用总结学习笔记
-date: 2022-09-19
+date: 2022-09-24
 author: lau
 tags: [SLAM, Blog]
 comments: true
