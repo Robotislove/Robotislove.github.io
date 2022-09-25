@@ -110,7 +110,7 @@ vector<int> inorderTraversal(TreeNode* root){
         if(cur != NULL){
             st.push(cur);
             cur = cur->left;
-        }else {
+        } else {
             cur = st.top();
             st.pop();
             result.push_back(cur->val);
@@ -222,6 +222,7 @@ leetcode[104] 二叉树的最大深度。给定一个二叉树，找出其最大
 - 二叉树的最大深度可以通过子树的最大深度推导出来。确实可以通过子树的最大深度推导出原树的深度，所以当然要首先利用递归函数的定义算出左右子树的最大深度，然后推出原树的最大深度，主要逻辑自然放在后序位置。
 
 1.
+
 ```c++
 // 记录最大深度
 int res = 0;
