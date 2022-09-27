@@ -99,3 +99,9 @@ pinned: false
 
 [1] [《剑指offer》所有题目解法思路与出现频率汇总](https://blog.csdn.net/weixin_43954951/article/details/125821879?spm=1001.2101.3001.6650.4&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-4-125821879-blog-109862706.t0_edu_mix&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-4-125821879-blog-109862706.t0_edu_mix&utm_relevant_index=5)
 
+[2] [剑指offer所有题目总结](https://blog.csdn.net/wszy1301/article/details/80910626?spm=1001.2101.3001.6650.10&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-10-80910626-blog-125821879.pc_relevant_multi_platform_featuressortv2dupreplace&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-10-80910626-blog-125821879.pc_relevant_multi_platform_featuressortv2dupreplace&utm_relevant_index=11)
+
+[3] [万字长文！剑指offer全题解思路汇总](https://blog.csdn.net/Sheng_zhenzhen/article/details/107747644?spm=1001.2101.3001.6650.6&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-6-107747644-blog-125821879.pc_relevant_multi_platform_featuressortv2dupreplace&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-6-107747644-blog-125821879.pc_relevant_multi_platform_featuressortv2dupreplace&utm_relevant_index=7)
+
+
+
