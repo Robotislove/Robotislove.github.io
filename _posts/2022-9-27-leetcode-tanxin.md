@@ -8,10 +8,6 @@ comments: true
 toc: false
 pinned: false
 
-
-
-
-
 ---
 
 Leetcode贪心算法总结学习笔记。
@@ -240,3 +236,10 @@ public:
 };
 ```
 
+## 参考文献
+
+[1] **https://blog.csdn.net/weixin_48994268/article/details/123121661**
+
+[2] https://blog.csdn.net/qq_41648804/article/details/119836763
+
+[3] https://blog.csdn.net/poolooloo/article/details/125918763
