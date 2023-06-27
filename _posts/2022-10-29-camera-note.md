@@ -1,8 +1,8 @@
 ---
 layout: post
 title: 相机选购调研笔记
-date: 2021-10-29
-author: zxl19
+date: 2022-10-29
+author: lau
 tags: [Photography, Blog]
 comments: true
 toc: true
