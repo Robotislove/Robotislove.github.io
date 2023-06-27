@@ -1,8 +1,8 @@
 ---
 layout: post
 title: LaTeX使用笔记
-date: 2021-03-29
-author: zxl19
+date: 2023-03-29
+author: lau
 tags: [LaTeX, Note]
 comments: true
 toc: true
