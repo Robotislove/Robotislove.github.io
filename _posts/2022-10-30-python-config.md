@@ -1,8 +1,8 @@
 ---
 layout: post
-title: Python读取配置文件
-date: 2021-10-30
-author: zxl19
+title: Python工具代码
+date: 2022-10-30
+author: lau
 tags: [Python, Note]
 comments: true
 toc: true
