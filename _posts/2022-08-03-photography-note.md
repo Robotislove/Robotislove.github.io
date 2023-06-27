@@ -1,8 +1,8 @@
 ---
 layout: post
 title: 摄影知识学习笔记
-date: 2021-08-03
-author: zxl19
+date: 2022-08-03
+author: lau
 tags: [Photography, Blog]
 comments: true
 toc: true
