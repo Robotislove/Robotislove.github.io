@@ -1,8 +1,8 @@
 ---
 layout: post
 title: 胶片相机使用笔记
-date: 2021-09-30
-author: zxl19
+date: 2022-09-30
+author: lau
 tags: [Photography, Blog]
 comments: true
 toc: true
