@@ -1,8 +1,8 @@
 ---
 layout: post
 title: 在VS Code中搭建轻量C++开发环境
-date: 2020-10-19
-author: zxl19
+date: 2023-2-19
+author: lua
 tags: [C++, VS Code, Note]
 comments: true
 toc: true
