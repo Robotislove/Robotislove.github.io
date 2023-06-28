@@ -2,7 +2,7 @@
 layout: post
 title: 深入理解STL源码学习笔记
 date: 2022-03-11
-author: zxl19
+author: lau
 tags: [STL, C++]
 comments: true
 toc: false
@@ -3145,61 +3145,5 @@ void post_order(TreeNode* Node) {
 }
 ```
 
-## 算法
-
-### 算法分类
-
-一般来说，STL的算法可以分为4大类：
-
-1. **不可变序列算法**：不直接修改所操作的容器内容的算法；
-2. **可变序列算法**：可以修改所操作的容器内容的算法；
-3. **排序和搜索算法**：对序列元素进行比较操作的算法；
-4. **数值算法**：4个通用数值算法；
-
-使用时需要引入头文件：
-
-```cpp
-#include <algorithm>                            // 大部分算法
-#include <numeric>                              // 数值算法
-```
-
-### 不可变序列算法
-
-TODO
-
-### 可变序列算法
-
-```cpp
-void reverse(s.begin(), s.end());               // 反转区间元素次序
-void swap(s.at(i), s.at(j));                    // 交换（对调）元素
-```
-
-### 排序和搜索算法
-
-```cpp
-void sort(s.begin(), s.end());                  // 对区间元素进行排序
-bool binary_search(s.begin(), s.end(), t);      // 在有序区间内按照二分查找方法查找是否存在与某一特定值相等的元素
-pair<S::iterator, S::iterator> equal_range(s.begin(), s.end(), t);  // 在有序区间内按照二分查找方法查找是否存在与某一特定值相等的元素，并返回一个上下限区间
-value_type& min(s.at(i), s.at(j));              // 返回最小值元素
-value_type& max(s.at(i), s.at(j));              // 返回最大值元素
-S::iterator min_element(s.begin(), s.end());    // 返回最小值元素所在位置
-S::iterator max_element(s.begin(), s.end());    // 返回最大值元素所在位置
-```
-
-### 数值算法
-
-TODO
-
-## 参考
-
-1. 《C++语言程序设计》
-2. 《labuladong的算法小抄》
-3. [C++教程-菜鸟教程](https://www.runoob.com/cplusplus/cpp-tutorial.html)
-4. [STL教程-C语言中文网](http://c.biancheng.net/stl/)
-5. [字符串1-CSDN博客](https://blog.csdn.net/qq_38537503/article/details/106279850)
-6. [字符串2-CSDN博客](https://blog.csdn.net/qq_42270373/article/details/84589231)
-7. [字符串3-CSDN博客](https://blog.csdn.net/weixin_36670529/article/details/108401528)
-8. [链表-腾讯云](https://cloud.tencent.com/developer/article/1656468)
-9. [二叉树-CSDN博客](https://blog.csdn.net/u013834525/article/details/80421684)
 
 
