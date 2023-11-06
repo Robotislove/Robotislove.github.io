@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 嵌入式AI学习笔记(上)
+title: 嵌入式AI TinyML学习笔记(上)
 date: 2023-11-06
 author: lau
 tags: [AI, Archive]
@@ -9,7 +9,7 @@ toc: false
 pinned: false
 ---
 
-嵌入式AI学习汇总笔记。
+嵌入式AI TinyML边缘智能学习汇总笔记。
 
 <!-- more -->
 
