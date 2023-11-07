@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 嵌入式AI TinyML学习笔记(一)
+title: 嵌入式AI TinyML学习笔记(下)
 date: 2023-11-07
 author: lau
 tags: [AI, Archive]
